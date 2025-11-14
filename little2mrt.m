@@ -3,9 +3,16 @@ clc; clear; close all
 
 % Input tables ("handwritten")
 Tg = readtable('table gdp per country by hand .xlsx');          % columns: Country, Year, GDP
-Te = readtable('table emigration per country by hand .xlsx');   % columns: Country, Year, EmigRate
+Te = readtable('table emigration per country by hand .xlsx');
+% columns: Country, Year, EmigRate
+%tables with gdp every year. 
 
-% Normalisation helper for country names (no mistakes with maiusc/minusc
+anne_avec_donne = (Te.Year(1):1:Te.Year(end));
+emigration_completion = interp1(Te.Year, Te.EmigrationRate, anne_avec_donne, 'linear'); 
+Te1 = table(anne_avec_donne, emigration_completion,'Variablenames', {'Year', 'Emigration'})
+disp(Te1)
+
+% Normalisation helper for country names (no mistakes with maiusc/minusc)
 normalise_country = @(s) lower(strtrim(string(s)));
 
 % Harmonise textual columns
@@ -79,7 +86,7 @@ for i = 1:numel(countries)
     c = countries(i);
     Tc = T(T.Country == c, :);
     if height(Tc) < 4, continue; end
-    % all year without the last one to 
+    % all year without the last one to evaluate precision of the model 
     Tc = sortrows(Tc,'Year');
     Tr = Tc(1:end-1,:); Te1 = Tc(end,:);
     b_c = fit_one(Tr);
@@ -91,11 +98,7 @@ if ~isempty(R)
     fprintf('RMSE holdout per-country (last year out): %.4g\n', rmse);
 end
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
 % --- Visualise ---
 coef_keys = sort(keys(coef));
 if isempty(coef_keys)
@@ -111,33 +114,12 @@ else
     grid on;
 end
 
-function beta = fit_one(Tc)
-%FIT_ONE regression coeff for one country 
-=======
+
+
 
 function beta = fit_one(Tc)
 %FIT_ONE estimation regression coefficient for sibl^gle country.
->>>>>>> Stashed changes
-=======
 
-function beta = fit_one(Tc)
-%FIT_ONE estimation regression coefficient for sibl^gle country.
->>>>>>> Stashed changes
-=======
-
-function beta = fit_one(Tc)
-%FIT_ONE estimation regression coefficient for sibl^gle country.
->>>>>>> Stashed changes
-=======
-
-function beta = fit_one(Tc)
-%FIT_ONE estimation regression coefficient for sibl^gle country.
->>>>>>> Stashed changes
-=======
-
-function beta = fit_one(Tc)
-%FIT_ONE estimation regression coefficient for sibl^gle country.
->>>>>>> Stashed changes
     x1 = log(Tc.GDP(:));
     x2 = double(Tc.Year(:));
     X  = [ones(size(x1)) x1 x2];
