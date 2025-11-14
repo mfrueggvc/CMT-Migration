@@ -91,6 +91,7 @@ if ~isempty(R)
     fprintf('RMSE holdout per-country (last year out): %.4g\n', rmse);
 end
 
+<<<<<<< Updated upstream
 % --- Visualise ---
 coef_keys = sort(keys(coef));
 if isempty(coef_keys)
@@ -108,6 +109,11 @@ end
 
 function beta = fit_one(Tc)
 %FIT_ONE regression coeff for one country 
+=======
+
+function beta = fit_one(Tc)
+%FIT_ONE estimation regression coefficient for sibl^gle country.
+>>>>>>> Stashed changes
     x1 = log(Tc.GDP(:));
     x2 = double(Tc.Year(:));
     X  = [ones(size(x1)) x1 x2];

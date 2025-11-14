@@ -1,15 +1,15 @@
 clc;
 
 clear;
-
+%%
 GDP = [1000; 5000; 10000; 20000; 40000; 60000];
 Emigration = [15; 10; 7; 4; 2; 1];
 
 GDP = GDP(:); Emigration = Emigration(:);
-X = [ones(size(GDP)) GDP];
-beta = X \ Emigration;
+X = [ones(size(GDP)) GDP]
+beta = X \ Emigration
 
-
+%%
 disp('Intercept and slope:');
 disp(beta.');
 
@@ -27,3 +27,5 @@ ylabel('Emigration rate (per 1000 people)');
 title('Simple Emigration Estimation (No Toolbox)');
 legend('Data', 'Fitted line');
 grid on;
+
+clear
