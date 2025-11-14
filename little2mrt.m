@@ -91,7 +91,7 @@ if ~isempty(R)
     fprintf('RMSE holdout per-country (last year out): %.4g\n', rmse);
 end
 
-% --- Visualizzazione dei risultati ---
+% --- Visualizzaz ---
 coef_keys = sort(keys(coef));
 if isempty(coef_keys)
     warning('Country does not have sufficient data to estimate properly.');
