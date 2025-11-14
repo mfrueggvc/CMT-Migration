@@ -71,7 +71,7 @@ end
 
 % Predict
 y_hat = b(1) + b(2) * log(g) + b(3) * double(year_in);
-fprintf('Emigration Estimation %s in %d: %.6g (unit as in the data)\n', country_in, year_in, y_hat);
+fprintf('Emigration Estimation %s in %d: %.6g (people left)\n', country_in, year_in, y_hat);
 
 % Hold-out to evaluate predicting capacity
 R = [];
@@ -91,7 +91,7 @@ if ~isempty(R)
     fprintf('RMSE holdout per-country (last year out): %.4g\n', rmse);
 end
 
-% --- Visualizzazione dei risultati ---
+% --- Visualise ---
 coef_keys = sort(keys(coef));
 if isempty(coef_keys)
     warning('Country does not have sufficient data to estimate properly.');
@@ -107,7 +107,7 @@ else
 end
 
 function beta = fit_one(Tc)
-%FIT_ONE Stima i coefficienti della regressione per un singolo paese.
+%FIT_ONE regression coeff for one country 
     x1 = log(Tc.GDP(:));
     x2 = double(Tc.Year(:));
     X  = [ones(size(x1)) x1 x2];
