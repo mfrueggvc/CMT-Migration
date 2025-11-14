@@ -5,7 +5,7 @@ clc; clear; close all
 Tg = readtable('table gdp per country by hand .xlsx');          % columns: Country, Year, GDP
 Te = readtable('table emigration per country by hand .xlsx');   % columns: Country, Year, EmigRate
 
-% Normalisation helper for country names
+% Normalisation helper for country names (no mistakes with maiusc/minusc
 normalise_country = @(s) lower(strtrim(string(s)));
 
 % Harmonise textual columns
@@ -21,7 +21,7 @@ end
 if any(strcmpi(Te.Properties.VariableNames, 'EmigRate'))
     Te = renamevars(Te, 'EmigRate', 'EmigrationRate');
 elseif ~any(strcmpi(Te.Properties.VariableNames, 'EmigrationRate'))
-    error('La tabella di emigrazione deve contenere la colonna EmigRate o EmigrationRate.');
+    error('Table must contain column Emigration Rate.');
 end
 
 % Ensure emigration rates are numeric
@@ -38,12 +38,12 @@ coef = containers.Map('KeyType','char','ValueType','any');
 for i = 1:numel(countries)
     c = countries(i);
     Tc = T(T.Country == c, :);
-    if height(Tc) >= 3        % minimo ragionevole
+    if height(Tc) >= 3        % reasonable minimal value 
         coef(char(c)) = fit_one(Tc);
     end
 end
 
-% Stima pooled per i paesi senza abbastanza dati
+% Stima pooled for country without enough data 
 x1 = log(T.GDP(:));
 x2 = double(T.Year(:));
 Xpooled = [ones(size(x1)) x1 x2];
@@ -56,7 +56,7 @@ year_in    = input('Requested Year (es. 2010): ');
 key = normalise_country(country_in);
 key_char = char(key);
 
-% GDP del paese/anno richiesto (deve esistere nella tabella GDP)
+% GDP country/year requuest
 rowGDP = Tg(Tg.Country == key & Tg.Year == year_in, :);
 if isempty(rowGDP)
     error('GDP not present for country/year chosen.');
@@ -71,15 +71,15 @@ end
 
 % Predict
 y_hat = b(1) + b(2) * log(g) + b(3) * double(year_in);
-fprintf('Emigration Estimation %s-%d: %.6g (unit as in the data)\n', country_in, year_in, y_hat);
+fprintf('Emigration Estimation %s in %d: %.6g (unit as in the data)\n', country_in, year_in, y_hat);
 
-% Hold-out per valutare la capacità predittiva
+% Hold-out to evaluate predicting capacity
 R = [];
 for i = 1:numel(countries)
     c = countries(i);
     Tc = T(T.Country == c, :);
     if height(Tc) < 4, continue; end
-    % Usa tutti gli anni tranne l'ultimo per fit e predici l'ultimo
+    % all year without the last one to 
     Tc = sortrows(Tc,'Year');
     Tr = Tc(1:end-1,:); Te1 = Tc(end,:);
     b_c = fit_one(Tr);
