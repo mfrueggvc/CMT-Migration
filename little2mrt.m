@@ -94,6 +94,7 @@ end
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 % --- Visualise ---
 coef_keys = sort(keys(coef));
 if isempty(coef_keys)
@@ -111,6 +112,11 @@ end
 
 function beta = fit_one(Tc)
 %FIT_ONE regression coeff for one country 
+=======
+
+function beta = fit_one(Tc)
+%FIT_ONE estimation regression coefficient for sibl^gle country.
+>>>>>>> Stashed changes
 =======
 
 function beta = fit_one(Tc)
