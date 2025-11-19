@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/markruegg/Documents/EPFL/GitHub/CMT-Migration/comparison'
+relocations:     []
+...
