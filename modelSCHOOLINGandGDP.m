@@ -1,26 +1,55 @@
 clc; clear; clear all; 
 
-Tg = readtable('gdp.csv');             % Country, Year, GDP
-Ts = readtable('Years_of_schooling.csv');       % Country, Year, SchoolYears
-Tn = readtable('table_netmigration.csv');    % Country, Year, NetMigration
+Tg = readtable('GDP_SouthAmerica_1990_2019.csv');   % wide table
+
+varCountries = Tg.Properties.VariableNames(2:end);
+
+Tg = stack(Tg, varCountries, ...
+           'NewDataVariableName', 'GDP', ...
+           'IndexVariableName', 'Country');
+
+Tg.Country = upper(strtrim(string(Tg.Country)));
 
 
-Tg.Country = upper(strtrim(Tg.Country));
-varYears = Tg.Properties.VariableNames(2:end);
-Y = stack(Tg, varYears, ...
-            'NewDataVariableName','GDP', ...
-            'IndexVariableName','Year');
+% --- Years of schooling ---
 
-Y.Year = str2double(Y.Year);
+Ts = readtable('Years_of_schooling.csv');      % geoUnit, year, value, ...
+Map = readtable('CODEtoNAMECountry.csv');      % Var1 = codice, Var2 = nome
 
-Ts = readtable('Years_of_schooling.csv');      % contiene CODE, Year, SchoolYears
-Map = readtable('CODEtoNAMECountry.csv');      % contiene CODE, Country
-Ts = innerjoin(Ts, Map, 'Keys','CODE');
-Ts.CODE = [];
-Ts.Country = upper(strtrim(Ts.Country));
-Tn.Country = upper(strtrim(Tn.Country));
+% Rinomina colonne del mapping
+Map.Properties.VariableNames = {'geoUnit','Country'};
 
-T = innerjoin(innerjoin(Tg, Ts, 'Keys', {'Country','Year'}), Tn, 'Keys', {'Country','Year'});
+% Join
+Ts = innerjoin(Ts, Map, 'Keys','geoUnit');
+
+% Rinomina schooling
+Ts.Properties.VariableNames{'year'} = 'Year';
+Ts.Properties.VariableNames{'value'} = 'SchoolYears';
+
+% Pulizia
+Ts.Country = upper(strtrim(string(Ts.Country)));
+Ts.geoUnit = [];
+Ts.indicatorId = [];
+Ts.qualifier = [];
+Ts.magnitude = [];
+
+
+Tn = readtable('NetMigration_SouthAmerica_1990_2019.csv');   
+
+varCountriesN = Tn.Properties.VariableNames(2:end);
+
+
+Tn = stack(Tn, varCountriesN, ...
+           'NewDataVariableName', 'NetMigration', ...
+           'IndexVariableName', 'Country');
+
+
+Tn.Country = upper(strtrim(string(Tn.Country)));
+
+
+
+T = innerjoin(innerjoin(Tg, Ts, 'Keys', {'Country','Year'}), ...
+              Tn, 'Keys', {'Country','Year'});
 
 T.GDPn = normalize(T.GDP);
 T.Schooln = normalize(T.SchoolYears);
@@ -35,8 +64,10 @@ b = Xtrain \ ytrain;
 Tout = [Ttrain; Tpred];
 writetable(Tout, 'net_migration_predictions.csv');
 
-disp('Coefficienti stimati:');
+disp('Coefficients estimated:');
 disp(b);
+Xpred = [ones(height(Tpred),1), Tpred.GDPn, Tpred.Schooln];
+Tpred.PredictedNetMigration = Xpred * b;
 
 OUT = Tpred(:, {'Country','Year','PredictedNetMigration'});
 writetable(OUT, 'predicted_netmigration.csv');

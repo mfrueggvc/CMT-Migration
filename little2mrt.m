@@ -2,7 +2,16 @@
 clc; clear; close all
 % THIS PROGRAM CAN PREDICT THE NET MIGRATION OF A TARGET YEAR, IN ORDER TO DO THAT, WE NEED TO HAVE THE GDP OF THAT.   
 % read table GDP (columns: Country, Year, GDP, NetMig)
-T = readtable('GDP_long.txt','Delimiter','\t');
+Tg = readtable('GDP_SouthAmerica_1990_2019.csv');   % wide table
+
+varCountries = Tg.Properties.VariableNames(2:end);
+
+Tg = stack(Tg, varCountries, ...
+           'NewDataVariableName', 'GDP', ...
+           'IndexVariableName', 'Country');
+
+Tg.Country = upper(strtrim(string(Tg.Country)));
+
 
 % 
 country_name = input('Choose country: ','s');
