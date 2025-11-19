@@ -2,7 +2,7 @@
 clc; clear; close all
 % THIS PROGRAM CAN PREDICT THE NET MIGRATION OF A TARGET YEAR, IN ORDER TO DO THAT, WE NEED TO HAVE THE GDP OF THAT.   
 % read table GDP (columns: Country, Year, GDP, NetMig)
-T = readtable('gdp_data.txt','Delimiter','\t');
+T = readtable('GDP_long.txt','Delimiter','\t');
 
 % 
 country_name = input('Choose country: ','s');
@@ -19,7 +19,7 @@ d = B(2);
 
 %create a range of data from a choosen range of time in the past with clear
 %datas
-idx_est = Tc.Year >= 1990 & Tc.Year <= 2019;
+idx_est = Tc.Year >= 1990 & Tc.Year <= 2005;
 Te = Tc(idx_est,:);
 
 % Variables
