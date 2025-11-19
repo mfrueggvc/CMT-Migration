@@ -1,7 +1,7 @@
 clc; clear; clear all; 
 
 Tg = readtable('gdp.csv');             % Country, Year, GDP
-Ts = readtable('table_schooling.csv');       % Country, Year, SchoolYears
+Ts = readtable('Years_of_schooling.csv');       % Country, Year, SchoolYears
 Tn = readtable('table_netmigration.csv');    % Country, Year, NetMigration
 
 
@@ -12,6 +12,11 @@ Y = stack(Tg, varYears, ...
             'IndexVariableName','Year');
 
 Y.Year = str2double(Y.Year);
+
+Ts = readtable('Years_of_schooling.csv');      % contiene CODE, Year, SchoolYears
+Map = readtable('CODEtoNAMECountry.csv');      % contiene CODE, Country
+Ts = innerjoin(Ts, Map, 'Keys','CODE');
+Ts.CODE = [];
 Ts.Country = upper(strtrim(Ts.Country));
 Tn.Country = upper(strtrim(Tn.Country));
 
