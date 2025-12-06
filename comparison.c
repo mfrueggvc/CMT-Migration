@@ -1,6 +1,4 @@
 #include <stdio.h>
-<<<<<<< Updated upstream
-=======
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -244,11 +242,7 @@ int main(int argc, char *argv[]) {
     printf("\n--- Global Summary ---\n");
     printf("Detailed data saved to: %s\n", file_out_detailed);
     printf("Aggregated data saved to: %s\n", file_out_summary);
->>>>>>> Stashed changes
 
-int main() {
-    printf("Hello, world!\n");
-    return 0;
 }
 
 
