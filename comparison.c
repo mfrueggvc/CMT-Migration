@@ -7,7 +7,7 @@
 typedef struct {
     char country[64];
     int year;
-    double value; // Renamed from net_migration to match your logic below
+    double value; // Renamed from net_migration
 } Row;
 
 // 1. Function to load CSV (Moved outside main)
@@ -54,7 +54,6 @@ double find_value(Row rows[], int n, const char *country, int year) {
     }
     return 1e18; // Sentinel for "not found"
     // Ensure all control paths return a value
-    return 1e18;
 }
 
 int main(int argc, char *argv[]) {
