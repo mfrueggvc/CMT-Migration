@@ -356,11 +356,11 @@ for c = 1:length(countries)
     predResults.Country = repmat({char(currentCountry)}, height(Tpred), 1); 
     predResults.Year = Tpred.Year; 
     predResults.PredictedNetMigration = predicted_migration; 
-    predResults.GDP = Tpred.GDP; 
-    predResults.SchoolYears = Tpred.SchoolYears; 
-    predResults.Unemployment = Tpred.Unemployment; 
-    predResults.Homicide = Tpred.Homicide;
-    predResults.GDPgrowth = Tpred.GDPgrowth; 
+    %predResults.GDP = Tpred.GDP; 
+    %predResults.SchoolYears = Tpred.SchoolYears; 
+    %predResults.Unemployment = Tpred.Unemployment; 
+    %predResults.Homicide = Tpred.Homicide;
+    %predResults.GDPgrowth = Tpred.GDPgrowth; 
     
     allPredictions = [allPredictions; predResults]; 
     
@@ -378,7 +378,7 @@ for c = 1:length(countries)
             metricRow.RSquared, metricRow.AdjRSquared, metricRow.RMSE_Train, metricRow.NumObservations); 
 end 
 
-%% CONTINENTAL AGGREGATION
+% CONTINENTAL AGGREGATION
 
 fprintf('=== Aggregating South America Results ===\n'); 
 
@@ -391,17 +391,18 @@ for y = 1:length(years)
     row = table(); 
     row.Year = years(y); 
     row.TotalPredictedMigration = sum(yearData.PredictedNetMigration); 
-    row.TotalGDP = sum(yearData.GDP); 
-    row.AvgUnemployment = mean(yearData.Unemployment); 
-    row.AvgHomicide = mean(yearData.Homicide);
-    row.AvgSchoolYears = mean(yearData.SchoolYears); 
-    row.NumCountries = height(yearData); 
+    %row.TotalGDP = sum(yearData.GDP); 
+    %row.AvgUnemployment = mean(yearData.Unemployment); 
+    %row.AvgHomicide = mean(yearData.Homicide);
+    %row.AvgSchoolYears = mean(yearData.SchoolYears); 
+    %row.NumCountries = height(yearData); 
     
     continentalPred = [continentalPred; row]; 
 end 
 
 %% SAVE RESULTS TO CSV
-
+allPredictions.PredictedNetMigration = round(allPredictions.PredictedNetMigration);
+continentalPred.TotalPredictedMigration = round(continentalPred.TotalPredictedMigration);
 currentDir = pwd; 
 writetable(allPredictions, 'predicted_migration_all_countries.csv'); 
 writetable(continentalPred, 'predicted_migration_south_america.csv'); 
@@ -426,80 +427,80 @@ fprintf('=== Continental Predictions (2015-2019) ===\n');
 disp(continentalPred); 
 fprintf('\n'); 
 
-%% VISUALIZATION
-
-% Figure 1: Model Quality by Country 
-figure('Position', [100, 100, 1200, 500]); 
-
-subplot(1,2,1); 
-bar(categorical(allMetrics.Country), [allMetrics.RSquared]); 
-ylabel('R² (Model Fit)', 'FontSize', 12); 
-xlabel('Country', 'FontSize', 12); 
-title('Training Model Quality by Country', 'FontSize', 14, 'FontWeight', 'bold'); 
-ylim([0, 1]); 
-grid on; 
-xtickangle(45); 
-
-subplot(1,2,2); 
-bar(categorical(allMetrics.Country), [allMetrics.RMSE_Train]); 
-ylabel('RMSE (Training)', 'FontSize', 12); 
-xlabel('Country', 'FontSize', 12); 
-title('Prediction Error by Country', 'FontSize', 14, 'FontWeight', 'bold'); 
-grid on; 
-xtickangle(45); 
-
-% Figure 2: Continental Trends
-figure('Position', [100, 100, 1000, 800]); 
-
-subplot(3,1,1); 
-plot(continentalPred.Year, continentalPred.TotalPredictedMigration, '-ro', ...
-     'LineWidth', 2, 'MarkerSize', 8, 'MarkerFaceColor', 'r'); 
-xlabel('Year', 'FontSize', 12); 
-ylabel('Total Net Migration', 'FontSize', 12); 
-title('South America - Predicted Total Net Migration (2015-2019)', 'FontSize', 14, 'FontWeight', 'bold'); 
-grid on; 
-
-subplot(3,1,2); 
-yyaxis left; 
-plot(continentalPred.Year, continentalPred.TotalGDP, '-bs', 'LineWidth', 2, 'MarkerSize', 8); 
-ylabel('Total GDP', 'FontSize', 12); 
-yyaxis right; 
-plot(continentalPred.Year, continentalPred.AvgUnemployment, '-rd', 'LineWidth', 2, 'MarkerSize', 8); 
-ylabel('Avg Unemployment Rate (%)', 'FontSize', 12); 
-xlabel('Year', 'FontSize', 12); 
-title('Economic Indicators - South America', 'FontSize', 14, 'FontWeight', 'bold'); 
-legend('Total GDP', 'Avg Unemployment', 'Location', 'best'); 
-grid on; 
-
-subplot(3,1,3);
-plot(continentalPred.Year, continentalPred.AvgHomicide, '-md', ...
-     'LineWidth', 2, 'MarkerSize', 8, 'MarkerFaceColor', 'm');
-xlabel('Year', 'FontSize', 12);
-ylabel('Avg Homicide Rate (per 100k)', 'FontSize', 12);
-title('Safety Indicator - South America', 'FontSize', 14, 'FontWeight', 'bold');
-grid on;
-
-% Figure 3: Individual Country Predictions 
-figure('Position', [100, 100, 1400, 800]); 
-[~, sortIdx] = sort([allMetrics.RSquared], 'descend'); 
-displayCountries = min(9, height(allMetrics)); 
-
-for i = 1:displayCountries 
-    subplot(3, 3, i); 
-    countryData = allPredictions(strcmpi(allPredictions.Country, allMetrics.Country{sortIdx(i)}), :); 
-    
-    plot(countryData.Year, countryData.PredictedNetMigration, '-ro', ...
-         'LineWidth', 2, 'MarkerSize', 8, 'MarkerFaceColor', 'r'); 
-    
-    title(sprintf('%s (R²=%.3f)', char(allMetrics.Country{sortIdx(i)}), ...
-          allMetrics.RSquared(sortIdx(i))), 'FontSize', 11, 'FontWeight', 'bold'); 
-    xlabel('Year', 'FontSize', 10); 
-    ylabel('Predicted Migration', 'FontSize', 10); 
-    grid on; 
-    
-    hold on; 
-    yline(0, '--k', 'LineWidth', 0.5);  % Reference line at zero
-end 
+% %% VISUALIZATION
+% 
+% % Figure 1: Model Quality by Country 
+% figure('Position', [100, 100, 1200, 500]); 
+% 
+% subplot(1,2,1); 
+% bar(categorical(allMetrics.Country), [allMetrics.RSquared]); 
+% ylabel('R² (Model Fit)', 'FontSize', 12); 
+% xlabel('Country', 'FontSize', 12); 
+% title('Training Model Quality by Country', 'FontSize', 14, 'FontWeight', 'bold'); 
+% ylim([0, 1]); 
+% grid on; 
+% xtickangle(45); 
+% 
+% subplot(1,2,2); 
+% bar(categorical(allMetrics.Country), [allMetrics.RMSE_Train]); 
+% ylabel('RMSE (Training)', 'FontSize', 12); 
+% xlabel('Country', 'FontSize', 12); 
+% title('Prediction Error by Country', 'FontSize', 14, 'FontWeight', 'bold'); 
+% grid on; 
+% xtickangle(45); 
+% 
+% % Figure 2: Continental Trends
+% figure('Position', [100, 100, 1000, 800]); 
+% 
+% subplot(3,1,1); 
+% plot(continentalPred.Year, continentalPred.TotalPredictedMigration, '-ro', ...
+%      'LineWidth', 2, 'MarkerSize', 8, 'MarkerFaceColor', 'r'); 
+% xlabel('Year', 'FontSize', 12); 
+% ylabel('Total Net Migration', 'FontSize', 12); 
+% title('South America - Predicted Total Net Migration (2015-2019)', 'FontSize', 14, 'FontWeight', 'bold'); 
+% grid on; 
+% 
+% subplot(3,1,2); 
+% yyaxis left; 
+% plot(continentalPred.Year, continentalPred.TotalGDP, '-bs', 'LineWidth', 2, 'MarkerSize', 8); 
+% ylabel('Total GDP', 'FontSize', 12); 
+% yyaxis right; 
+% plot(continentalPred.Year, continentalPred.AvgUnemployment, '-rd', 'LineWidth', 2, 'MarkerSize', 8); 
+% ylabel('Avg Unemployment Rate (%)', 'FontSize', 12); 
+% xlabel('Year', 'FontSize', 12); 
+% title('Economic Indicators - South America', 'FontSize', 14, 'FontWeight', 'bold'); 
+% legend('Total GDP', 'Avg Unemployment', 'Location', 'best'); 
+% grid on; 
+% 
+% subplot(3,1,3);
+% plot(continentalPred.Year, continentalPred.AvgHomicide, '-md', ...
+%      'LineWidth', 2, 'MarkerSize', 8, 'MarkerFaceColor', 'm');
+% xlabel('Year', 'FontSize', 12);
+% ylabel('Avg Homicide Rate (per 100k)', 'FontSize', 12);
+% title('Safety Indicator - South America', 'FontSize', 14, 'FontWeight', 'bold');
+% grid on;
+% 
+% % Figure 3: Individual Country Predictions 
+% figure('Position', [100, 100, 1400, 800]); 
+% [~, sortIdx] = sort([allMetrics.RSquared], 'descend'); 
+% displayCountries = min(9, height(allMetrics)); 
+% 
+% for i = 1:displayCountries 
+%     subplot(3, 3, i); 
+%     countryData = allPredictions(strcmpi(allPredictions.Country, allMetrics.Country{sortIdx(i)}), :); 
+% 
+%     plot(countryData.Year, countryData.PredictedNetMigration, '-ro', ...
+%          'LineWidth', 2, 'MarkerSize', 8, 'MarkerFaceColor', 'r'); 
+% 
+%     title(sprintf('%s (R²=%.3f)', char(allMetrics.Country{sortIdx(i)}), ...
+%           allMetrics.RSquared(sortIdx(i))), 'FontSize', 11, 'FontWeight', 'bold'); 
+%     xlabel('Year', 'FontSize', 10); 
+%     ylabel('Predicted Migration', 'FontSize', 10); 
+%     grid on; 
+% 
+%     hold on; 
+%     yline(0, '--k', 'LineWidth', 0.5);  % Reference line at zero
+% end 
 
 sgtitle('Country-Level Migration Predictions (2015-2019)', 'FontSize', 14, 'FontWeight', 'bold'); 
 
