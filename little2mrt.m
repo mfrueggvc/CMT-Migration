@@ -82,3 +82,6 @@ predicted_NetMig = X_new * b;
 
 disp('Prediction net migration:')
 disp(predicted_NetMig)
+
+
+pppp
