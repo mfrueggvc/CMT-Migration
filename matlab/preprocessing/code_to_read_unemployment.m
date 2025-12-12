@@ -106,7 +106,7 @@ for i = 1:length(south_america)
         raw_vals = table2array(row(1,:));
         vals = str2double(raw_vals(:));  % vecteur colonne
         
-        % 🔥 CORRECTION FINALE : padding/ajustement
+        %  CORRECTION FINALE : padding/ajustement
         if length(vals) < Ny
             vals = [vals; NaN(Ny-length(vals),1)];
         elseif length(vals) > Ny

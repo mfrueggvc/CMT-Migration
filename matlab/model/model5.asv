@@ -424,9 +424,15 @@ writetable(allMetrics,      fullfile(resultsDir, 'model_quality_metrics.csv'));
 fprintf('\n=== Results Saved Successfully ===\n');
 fprintf('Output directory: %s\n\n', resultsDir);
 fprintf('Generated files:\n');
-fprintf('  1. predicted_migration_all_countries.csv (Country-level predictions)\n');
-fprintf('  2. predicted_migration_south_america.csv (Continental aggregation)\n');
-fprintf('  3. model_quality_metrics.csv (Model R² and fit statistics)\n\n');
+fprintf('  1. predicted_migration_all_countries.csv\n');
+fprintf('  2. predicted_migration_south_america.csv\n');
+fprintf('  3. model_quality_metrics.csv\n\n');
+fprintf('\n=== Results Saved Successfully ===\n'); 
+fprintf('Output directory: %s\n\n', currentDir); 
+fprintf('Generated files:\n'); 
+fprintf('  1. predicted_migration_all_countries.csv  (Country-level predictions)\n'); 
+fprintf('  2. predicted_migration_south_america.csv  (Continental aggregation)\n'); 
+fprintf('  3. model_quality_metrics.csv              (Model R² and fit statistics)\n\n'); 
 
 %%  SUMMARY STATISTICS 
 

@@ -1,49 +1,37 @@
 clc; clear; close all; 
-
 fprintf('=== Migration Prediction Model for South America ===\n'); 
 fprintf('Training period: 1990-2014\n'); 
 fprintf('Prediction period: 2015-2019\n\n'); 
 
-
-thisFile    = mfilename('fullpath');      % /matlab/model/run_model.m
-modelDir    = fileparts(thisFile);       % /matlab/model
-projectRoot = fileparts(modelDir);       % /migration-project
-
-dataDir    = fullfile(projectRoot, 'data', 'processed');
-resultsDir = fullfile(projectRoot, 'results', 'predictions');
-
-if ~exist(resultsDir, 'dir')
-    mkdir(resultsDir);
-end
 %% DATA LOADING 
 % Load GDP 
-Tg = readtable(fullfile(dataDir, 'GDP_SouthAmerica_1990_2019.csv')); 
+Tg = readtable('GDP_SouthAmerica_1990_2019.csv'); 
 varCountries = Tg.Properties.VariableNames(2:end); 
 Tg = stack(Tg, varCountries, 'NewDataVariableName', 'GDP', 'IndexVariableName', 'Country'); 
 Tg.Country = upper(strtrim(string(Tg.Country))); 
 
 % Load Schooling 
-Ts = readtable(fullfile(dataDir,"Schooling_SouthAmerica_1990_2019 (1).csv")); 
+Ts = readtable("Schooling_SouthAmerica_1990_2019 (1).csv"); 
 varCountries = Ts.Properties.VariableNames(2:end); 
 Ts = stack(Ts, varCountries, 'NewDataVariableName', 'SchoolYears', 'IndexVariableName', 'Country'); 
 Ts.Country = upper(strtrim(string(Ts.Country))); 
 Ts = Ts(:, {'Country','Year','SchoolYears'}); 
 
 % Load Unemployment 
-Tu = readtable(fullfile(dataDir,'Unemployment_SouthAmerica_1990_2019.csv')); 
+Tu = readtable('Unemployment_SouthAmerica_1990_2019.csv'); 
 varCountries = Tu.Properties.VariableNames(2:end); 
 Tu = stack(Tu, varCountries, 'NewDataVariableName', 'Unemployment', 'IndexVariableName', 'Country'); 
 Tu.Country = upper(strtrim(string(Tu.Country))); 
 Tu = Tu(:, {'Country','Year','Unemployment'}); 
 
 % Load Net Migration (only used for training up to 2014) 
-Tn = readtable(fullfile(dataDir,'NetMigration_SouthAmerica_1990_2019.csv'); 
+Tn = readtable('NetMigration_SouthAmerica_1990_2019.csv'); 
 varCountriesN = Tn.Properties.VariableNames(2:end); 
 Tn = stack(Tn, varCountriesN, 'NewDataVariableName', 'NetMigration', 'IndexVariableName', 'Country'); 
 Tn.Country = upper(strtrim(string(Tn.Country))); 
 
 % Load Homicide Rate (per 100k population)
-Th = readtable(fullfile(dataDir,'homicide_per_100k (3).csv')); 
+Th = readtable('homicide_per_100k (3).csv'); 
 varCountries = Th.Properties.VariableNames(2:end); 
 Th = stack(Th, varCountries, 'NewDataVariableName', 'Homicide', 'IndexVariableName', 'Country'); 
 Th.Country = upper(strtrim(string(Th.Country))); 
@@ -417,16 +405,17 @@ end
 allPredictions.PredictedNetMigration = round(allPredictions.PredictedNetMigration);
 continentalPred.TotalPredictedMigration = round(continentalPred.TotalPredictedMigration);
 
-writetable(allPredictions,  fullfile(resultsDir, 'predicted_migration_all_countries.csv'));
-writetable(continentalPred, fullfile(resultsDir, 'predicted_migration_south_america.csv'));
-writetable(allMetrics,      fullfile(resultsDir, 'model_quality_metrics.csv'));
+currentDir = pwd; 
+writetable(allPredictions, 'predicted_migration_all_countries.csv'); 
+writetable(continentalPred, 'predicted_migration_south_america.csv'); 
+writetable(allMetrics, 'model_quality_metrics.csv'); 
 
-fprintf('\n=== Results Saved Successfully ===\n');
-fprintf('Output directory: %s\n\n', resultsDir);
-fprintf('Generated files:\n');
-fprintf('  1. predicted_migration_all_countries.csv (Country-level predictions)\n');
-fprintf('  2. predicted_migration_south_america.csv (Continental aggregation)\n');
-fprintf('  3. model_quality_metrics.csv (Model R² and fit statistics)\n\n');
+fprintf('\n=== Results Saved Successfully ===\n'); 
+fprintf('Output directory: %s\n\n', currentDir); 
+fprintf('Generated files:\n'); 
+fprintf('  1. predicted_migration_all_countries.csv  (Country-level predictions)\n'); 
+fprintf('  2. predicted_migration_south_america.csv  (Continental aggregation)\n'); 
+fprintf('  3. model_quality_metrics.csv              (Model R² and fit statistics)\n\n'); 
 
 %%  SUMMARY STATISTICS 
 
