@@ -4,7 +4,7 @@
 % Extracts 12 South American countries
 % ============================================================
 
-filename = 'net_migration.csv'; % <--- IMPORTANT : NOM DU FICHIER
+filename = 'Net_Migration_Worldbank_Unchanged.csv'; % <--- IMPORTANT : NOM DU FICHIER
 
 %% 1. Read file line-by-line (robust)
 fid = fopen(filename,'r','n','UTF-8');

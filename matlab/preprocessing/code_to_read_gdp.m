@@ -5,7 +5,7 @@
 % ============================================================
 
 %% 1. Read file line-by-line (robust)
-fid = fopen('gdp.csv','r','n','UTF-8');
+fid = fopen('GDP_Worldbank_Unchanged (1).csv','r','n','UTF-8');
 raw_lines = {};
 tline = fgetl(fid);
 while ischar(tline)
