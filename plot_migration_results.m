@@ -1,91 +1,115 @@
-% Clear workspace
+%% 1. Setup and Data Loading
 clear; clc; close all;
 
-% --- CONFIGURATION ---
-% Change these if you named your output files differently in the C step
-detailedFile = 'output_results.csv';
-summaryFile = 'summary_output_results.csv';
+% Define file names
+file1_name = 'summary_output_results.csv'; % Format: Country,Count,MAE,RMSE,MedianAE
+file2_name = 'output_results.csv'; % Format: Country,Year,Actual,Predicted,AbsError
 
-% Check files exist
-if ~isfile(detailedFile) || ~isfile(summaryFile)
-    error('Files not found. Make sure you ran the C program first and named the outputs correctly.');
+% Check if input files exist
+if ~isfile(file1_name) || ~isfile(file2_name)
+    error('Files not found. Please ensure file1.csv and file2.csv are in the current folder.');
 end
 
-% --- LOAD DATA ---
-opts = detectImportOptions(detailedFile);
-opts.VariableTypes{'Country'} = 'categorical';
-T_detail = readtable(detailedFile, opts);
+% Create a folder to save the PNGs
+outputFolder = 'Generated_Graphs';
+if ~exist(outputFolder, 'dir')
+    mkdir(outputFolder);
+end
 
-optsSum = detectImportOptions(summaryFile);
-optsSum.VariableTypes{'Country'} = 'categorical';
-T_summary = readtable(summaryFile, optsSum);
+% Load tables
+T1 = readtable(file1_name);
+T2 = readtable(file2_name);
 
-% --- FIGURE 1: Error Metrics Comparison ---
-figure('Name', 'Migration Prediction Errors', 'Color', 'w', 'Position', [100, 100, 1000, 600]);
-countries = string(T_summary.Country);
-n_countries = length(countries);
+% Convert Country columns to string/categorical for easier handling
+if ~isstring(T1.Country) && ~iscell(T1.Country)
+    T1.Country = string(T1.Country);
+end
+T1.CountryCat = categorical(T1.Country);
 
-% Create grouped bar chart data
-metrics = [T_summary.MAE, T_summary.MedianAE];
+%% 2. Graphs for File 1 (Summary Metrics by Country)
+% X-axis = Country, Y-axis = Value
 
-b = bar(categorical(countries), metrics);
-b(1).FaceColor = [0.2, 0.6, 0.8]; % Blue for MAE
-b(2).FaceColor = [0.8, 0.4, 0.2]; % Orange for Median
+f1 = figure('Name', 'Summary Metrics by Country', 'Color', 'w', 'Position', [100, 100, 1000, 800]);
+sgtitle('Model Performance Metrics by Country (File 1)');
 
-title('Impact of Outliers: MAE vs Median Absolute Error', 'FontSize', 14);
-ylabel('Net Migration Error', 'FontSize', 12);
-legend({'MAE (Sensitive to Outliers)', 'Median AE (Robust)'}, 'Location', 'best');
+% -- MAE Subplot --
+subplot(3, 1, 1);
+bar(T1.CountryCat, T1.MAE, 'FaceColor', [0.2 0.6 0.8]);
+ylabel('MAE');
+title('Mean Absolute Error');
 grid on;
-box on;
 
-% Add count labels on top
-xtips = b(1).XEndPoints;
-ytips = max(metrics, [], 2)' + (max(metrics(:)) * 0.05);
-for i = 1:length(countries)
-    text(xtips(i), ytips(i), sprintf('n=%d', T_summary.Count(i)), ...
-        'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom', 'FontSize', 8);
-end
+% -- RMSE Subplot --
+subplot(3, 1, 2);
+bar(T1.CountryCat, T1.RMSE, 'FaceColor', [0.8 0.4 0.2]);
+ylabel('RMSE');
+title('Root Mean Squared Error');
+grid on;
 
-% --- FIGURE 2: Time Series Per Country ---
-% Determine grid size for subplots
-num_plots = n_countries;
-cols = ceil(sqrt(num_plots));
-rows = ceil(num_plots / cols);
+% -- MedianAE Subplot --
+subplot(3, 1, 3);
+bar(T1.CountryCat, T1.MedianAE, 'FaceColor', [0.4 0.7 0.4]);
+ylabel('Median AE');
+title('Median Absolute Error');
+grid on;
 
-figure('Name', 'Actual vs Predicted Time Series', 'Color', 'w', 'Position', [150, 150, 1200, 800]);
+% SAVE FIGURE 1
+saveFileName = fullfile(outputFolder, 'Summary_Metrics_Comparison.png');
+saveas(f1, saveFileName);
+fprintf('Saved: %s\n', saveFileName);
 
-for i = 1:n_countries
-    country_name = countries(i);
-    
-    % Extract data for specific country
-    data_idx = T_detail.Country == country_name;
-    sub_data = T_detail(data_idx, :);
-    
-    % Sort by year to ensure lines connect correctly
-    sub_data = sortrows(sub_data, 'Year');
-    
-    subplot(rows, cols, i);
-    hold on;
-    
-    % Plot Actual
-    plot(sub_data.Year, sub_data.Actual, '-o', 'LineWidth', 2, 'Color', 'b', 'MarkerSize', 4, 'MarkerFaceColor', 'b');
-    
-    % Plot Predicted
-    plot(sub_data.Year, sub_data.Predicted, '--s', 'LineWidth', 2, 'Color', 'r', 'MarkerSize', 4, 'MarkerFaceColor', 'r');
-    
-    title(char(country_name), 'Interpreter', 'none', 'FontWeight', 'bold');
-    if i == 1
-        legend('Actual', 'Predicted', 'Location', 'best');
+
+%% 3. Graphs for File 2 (Time Series by Year)
+% X-axis = Year, Y-axis = Value (Real vs Predicted, AbsError)
+
+uniqueCountries = unique(T2.Country);
+
+for i = 1:length(uniqueCountries)
+    currentCountry = uniqueCountries{i};
+    if iscell(currentCountry)
+        currentCountry = currentCountry{1};
     end
     
+    % Filter data for this specific country
+    idx = strcmp(T2.Country, currentCountry);
+    countryData = T2(idx, :);
+    
+    % Sort by Year
+    [~, sortIdx] = sort(countryData.Year);
+    countryData = countryData(sortIdx, :);
+    
+    % Create figure
+    f2 = figure('Name', ['Time Series: ' currentCountry], 'Color', 'w', 'Visible', 'off'); % Visible off speeds up loop
+    sgtitle(['Time Series Analysis: ' currentCountry]);
+    
+    % -- Subplot 1: Real vs Predicted --
+    subplot(2, 1, 1);
+    plot(countryData.Year, countryData.Actual, '-o', 'LineWidth', 1.5, 'DisplayName', 'Actual');
+    hold on;
+    plot(countryData.Year, countryData.Predicted, '--x', 'LineWidth', 1.5, 'DisplayName', 'Predicted');
+    xlabel('Year');
+    ylabel('Value');
+    title('Real vs Predicted Value');
+    legend('Location', 'best');
     grid on;
-    xlim([min(sub_data.Year)-1, max(sub_data.Year)+1]);
     
-    % Format Y-axis to be readable
-    ax = gca;
-    ax.YAxis.Exponent = 0;
+    % -- Subplot 2: Absolute Error --
+    subplot(2, 1, 2);
+    bar(countryData.Year, countryData.AbsError, 'FaceColor', [0.6 0.6 0.6]); 
+    xlabel('Year');
+    ylabel('Absolute Error');
+    title('Absolute Error per Year');
+    grid on;
     
-    hold off;
+    % SAVE FIGURE 2 (Clean filename to avoid errors with spaces)
+    cleanCountryName = strrep(currentCountry, ' ', '_'); 
+    saveFileName = fullfile(outputFolder, ['TimeSeries_' cleanCountryName '.png']);
+    saveas(f2, saveFileName);
+    fprintf('Saved: %s\n', saveFileName);
+    
+    % Close figure to free memory
+    close(f2);
 end
 
-sgtitle('Migration Trends: Historical vs Predicted (Validation)', 'FontSize', 16);
+disp('------------------------------------------------');
+disp(['Processing complete. All graphs saved in: ' outputFolder]);
