@@ -400,20 +400,11 @@ for y = 1:length(years)
     continentalPred = [continentalPred; row]; 
 end 
 
-<<<<<<< Updated upstream
-%% SAVE RESULTS TO CSV
-allPredictions.PredictedNetMigration = round(allPredictions.PredictedNetMigration);
-continentalPred.TotalPredictedMigration = round(continentalPred.TotalPredictedMigration);
-=======
-<<<<<<< Updated upstream
-
-=======
 %% SAVE RESULTS TO CSV
 
 allPredictions.PredictedNetMigration = round(allPredictions.PredictedNetMigration);
 continentalPred.TotalPredictedMigration = round(continentalPred.TotalPredictedMigration);
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
 currentDir = pwd; 
 writetable(allPredictions, 'predicted_migration_all_countries.csv'); 
 writetable(continentalPred, 'predicted_migration_south_america.csv'); 
@@ -426,7 +417,7 @@ fprintf('  1. predicted_migration_all_countries.csv  (Country-level predictions)
 fprintf('  2. predicted_migration_south_america.csv  (Continental aggregation)\n'); 
 fprintf('  3. model_quality_metrics.csv              (Model R² and fit statistics)\n\n'); 
 
-%% ========== SUMMARY STATISTICS ==========
+%%  SUMMARY STATISTICS 
 
 fprintf('=== Model Summary ===\n'); 
 fprintf('Total countries processed: %d\n', height(allMetrics)); 
@@ -438,7 +429,7 @@ fprintf('=== Continental Predictions (2015-2019) ===\n');
 disp(continentalPred); 
 fprintf('\n'); 
 
-% %% VISUALIZATION
+%% VISUALIZATION
 % 
 % % Figure 1: Model Quality by Country 
 % figure('Position', [100, 100, 1200, 500]); 
@@ -512,7 +503,7 @@ fprintf('\n');
 %     hold on; 
 %     yline(0, '--k', 'LineWidth', 0.5);  % Reference line at zero
 % end 
-
+%%
 sgtitle('Country-Level Migration Predictions (2015-2019)', 'FontSize', 14, 'FontWeight', 'bold'); 
 
 fprintf('=== Visualization Complete ===\n'); 
