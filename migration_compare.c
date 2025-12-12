@@ -8,7 +8,7 @@
 #define MAX_ROWS 50000  
 #define MAX_COLS 200    
 #define MAX_LINE 8192
-#define MAX_YEARS_PER_COUNTRY 200 // Buffer for storing errors for Median calc
+#define MAX_YEARS_PER_COUNTRY 200 
 
 typedef struct {
     char country[64];
@@ -18,13 +18,13 @@ typedef struct {
 
 typedef struct {
     char name[64];
-    double sum_abs_error;
-    double sum_sq_error;     // For RMSE
-    double errors[MAX_YEARS_PER_COUNTRY]; // Store individual errors for Median
+    double sum_abs_error;  // For MAE
+    double sum_bias;       // For MBE (New!)
+    double errors[MAX_YEARS_PER_COUNTRY]; // Stores ABSOLUTE errors for Median calculation
     int count;
 } CountryStat;
 
-// Comparison function for qsort (needed for Median)
+// Comparison function for qsort
 int compare_doubles(const void *a, const void *b) {
     double arg1 = *(const double *)a;
     double arg2 = *(const double *)b;
@@ -71,7 +71,7 @@ int get_country_index(CountryStat stats[], int *count, const char *name) {
     }
     strcpy(stats[*count].name, name);
     stats[*count].sum_abs_error = 0;
-    stats[*count].sum_sq_error = 0;
+    stats[*count].sum_bias = 0; // Initialize Bias
     stats[*count].count = 0;
     (*count)++;
     return (*count) - 1;
@@ -184,7 +184,9 @@ int main(int argc, char *argv[]) {
     // COMPARE
     FILE *fout = fopen(argv[3], "w");
     if (!fout) { printf("Error creating output file.\n"); return 1; }
-    fprintf(fout, "Country,Year,Actual,Predicted,AbsError\n");
+    
+    // CHANGED: Header now says "Residual" instead of "AbsError"
+    fprintf(fout, "Country,Year,Actual,Predicted,Residual\n");
 
     int matches = 0;
 
@@ -192,19 +194,22 @@ int main(int argc, char *argv[]) {
         double actual = find_value(truth_rows, n_truth, pred_rows[i].country, pred_rows[i].year);
         
         if (actual < 1e17) {
-            double err = fabs(pred_rows[i].value - actual);
+            // NEW CALCULATION: Residual (Signed)
+            double residual = actual - pred_rows[i].value; 
+            double abs_err = fabs(residual);
             
+            // CHANGED: Printing residual (can be negative)
             fprintf(fout, "%s,%d,%.2f,%.2f,%.2f\n", 
-                    pred_rows[i].country, pred_rows[i].year, actual, pred_rows[i].value, err);
+                    pred_rows[i].country, pred_rows[i].year, actual, pred_rows[i].value, residual);
             
             matches++;
 
             int idx = get_country_index(country_stats, &num_countries, pred_rows[i].country);
-            country_stats[idx].sum_abs_error += err;
-            country_stats[idx].sum_sq_error += (err * err);
+            country_stats[idx].sum_abs_error += abs_err;
+            country_stats[idx].sum_bias += residual; // Track Bias
             
             if (country_stats[idx].count < MAX_YEARS_PER_COUNTRY) {
-                country_stats[idx].errors[country_stats[idx].count] = err;
+                country_stats[idx].errors[country_stats[idx].count] = abs_err; // Median uses ABS error
             }
             country_stats[idx].count++;
         }
@@ -215,7 +220,9 @@ int main(int argc, char *argv[]) {
     char summary_file[256];
     sprintf(summary_file, "summary_%s", argv[3]);
     FILE *fsum = fopen(summary_file, "w");
-    fprintf(fsum, "Country,Count,MAE,RMSE,MedianAE\n"); // Added Headers
+    
+    // CHANGED: Header now says "MBE" instead of "RMSE"
+    fprintf(fsum, "Country,Count,MAE,MBE,MedianAE\n"); 
 
     printf("Comparison complete. Found %d matching records.\n", matches);
     
@@ -223,9 +230,9 @@ int main(int argc, char *argv[]) {
         CountryStat *s = &country_stats[i];
         if(s->count > 0) {
             double mae = s->sum_abs_error / s->count;
-            double rmse = sqrt(s->sum_sq_error / s->count);
+            double mbe = s->sum_bias / s->count; // Calc Mean Bias Error
             
-            // Calculate Median
+            // Calculate Median (Still using Absolute Errors)
             double median_ae = 0;
             qsort(s->errors, s->count, sizeof(double), compare_doubles);
             if (s->count % 2 == 0) {
@@ -234,12 +241,13 @@ int main(int argc, char *argv[]) {
                 median_ae = s->errors[s->count/2];
             }
 
-            fprintf(fsum, "%s,%d,%.4f,%.4f,%.4f\n", s->name, s->count, mae, rmse, median_ae);
+            // CHANGED: Printing MBE instead of RMSE
+            fprintf(fsum, "%s,%d,%.4f,%.4f,%.4f\n", s->name, s->count, mae, mbe, median_ae);
         }
     }
     fclose(fsum);
     
-    printf("Results written to:\n  - %s (Detailed)\n  - %s (MAE, RMSE, Median)\n", argv[3], summary_file);
+    printf("Results written to:\n  - %s (Detailed with Residuals)\n  - %s (MAE, MBE, MedianAE)\n", argv[3], summary_file);
 
     free(truth_rows);
     free(pred_rows);
