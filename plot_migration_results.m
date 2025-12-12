@@ -2,8 +2,8 @@
 clear; clc; close all;
 
 % Define file names
-file1_name = 'file1.csv'; % Format: Country,Count,MAE,RMSE,MedianAE
-file2_name = 'file2.csv'; % Format: Country,Year,Actual,Predicted,AbsError
+file1_name = 'summary_output_results.csv'; % Format: Country,Count,MAE,RMSE,MedianAE
+file2_name = 'output_results.csv'; % Format: Country,Year,Actual,Predicted,AbsError
 
 % Check if input files exist
 if ~isfile(file1_name) || ~isfile(file2_name)
