@@ -19,8 +19,8 @@ EVAL_DIR="results/evaluation"
 mkdir -p "$PROCESSED_DIR" "$PRED_DIR" "$EVAL_DIR"
 
 # ---- Files ----
-# ⚠️ SET YOUR GROUND TRUTH FILENAME HERE
-TRUTH_CSV="$GT_DIR/migration_ground_truth.csv"
+
+TRUTH_CSV="$GT_DIR/NetMigration_SouthAmerica_1990_2019.csv"
 
 PRED_CSV="$PRED_DIR/predicted_migration_all_countries.csv"
 OUT_CSV="$EVAL_DIR/out.csv"
