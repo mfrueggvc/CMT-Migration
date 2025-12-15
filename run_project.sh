@@ -20,7 +20,7 @@ mkdir -p "$PROCESSED_DIR" "$PRED_DIR" "$EVAL_DIR"
 
 # ---- Files (YOU must set truth filename) ----
 # Ground truth (wide format: Year,Argentina,...)
-TRUTH_CSV="$GT_DIR/<<TRUTH_FILE_NAME.csv>>"
+TRUTH_CSV="$GT_DIR/NetMigration_SouthAmerica_1990_2019.csv"
 
 # Model output (created by run_model.m)
 PRED_CSV="$PRED_DIR/predicted_migration_all_countries.csv"
