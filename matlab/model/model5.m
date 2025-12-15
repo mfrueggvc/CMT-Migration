@@ -4,10 +4,10 @@ fprintf('=== Migration Prediction Model for South America ===\n');
 fprintf('Training period: 1990-2014\n'); 
 fprintf('Prediction period: 2015-2019\n\n'); 
 
-
-thisFile    = mfilename('fullpath');      % /matlab/model/run_model.m
-modelDir    = fileparts(thisFile);       % /matlab/model
-projectRoot = fileparts(modelDir);       % /migration-project
+thisFile    = mfilename('fullpath');        % .../matlab/model/run_model.m
+modelDir    = fileparts(thisFile);         % .../matlab/model
+matlabDir   = fileparts(modelDir);         % .../matlab
+projectRoot = fileparts(matlabDir);        % .../CMT-Migration
 
 dataDir    = fullfile(projectRoot, 'data', 'processed');
 resultsDir = fullfile(projectRoot, 'results', 'predictions');
