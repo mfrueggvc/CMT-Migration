@@ -1,7 +1,7 @@
 function preprocess_Unemployment(rawDir, processedDir)
 % Build unemployment dataset for South America (1990–2019) and save CSV.
 
-filename = fullfile(rawDir, 'Unemployement_Worldbank_Unchanged.csv');
+filename = fullfile(rawDir, 'Unemployment_Worldbank_Unchanged.csv');
 
 %% 1) Read all raw lines
 fid = fopen(filename, 'r', 'n', 'UTF-8');

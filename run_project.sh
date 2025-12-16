@@ -51,6 +51,7 @@ if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]] || [[ "$OSTYPE" == "c
 
 else
     echo "=== Unix/Linux/Mac detected ==="
+    MATLAB_CMD="matlab -batch" 
     IS_WINDOWS=false
 fi
 
