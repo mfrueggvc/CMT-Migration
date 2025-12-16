@@ -26,23 +26,42 @@ PRED_CSV="$PRED_DIR/predicted_migration_all_countries.csv"
 OUT_CSV="$EVAL_DIR/out.csv"
 
 # ---- Detect OS for MATLAB execution ----
+
 if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
-    echo "=== Windows detected - using alternative MATLAB execution ==="
-    MATLAB_CMD="matlab.exe -nosplash -nodesktop -wait -r"
+    echo "=== Windows detected - locating MATLAB automatically ==="
     IS_WINDOWS=true
+
+    
+    MATLAB_EXE_WIN="$(cmd.exe /c "where matlab 2>nul" | head -n 1 | tr -d '\r')"
+
+    
+    if [[ -z "$MATLAB_EXE_WIN" ]]; then
+        MATLAB_EXE_WIN="$(cmd.exe /c "dir /b /s \"C:\Program Files\MATLAB\R*\bin\matlab.exe\" 2>nul" | head -n 1 | tr -d '\r')"
+    fi
+    if [[ -z "$MATLAB_EXE_WIN" ]]; then
+        MATLAB_EXE_WIN="$(cmd.exe /c "dir /b /s \"C:\Program Files (x86)\MATLAB\R*\bin\matlab.exe\" 2>nul" | head -n 1 | tr -d '\r')"
+    fi
+
+    if [[ -z "$MATLAB_EXE_WIN" ]]; then
+        echo "ERROR: MATLAB not found. Install MATLAB or add it to Windows PATH."
+        exit 1
+    fi
+
+    echo "Using MATLAB: $MATLAB_EXE_WIN"
+
 else
     echo "=== Unix/Linux/Mac detected ==="
-    MATLAB_CMD="matlab -batch"
     IS_WINDOWS=false
 fi
+
 
 # ---- 1) MATLAB preprocessing ----
 echo "=== STEP 1: MATLAB preprocessing ==="
 
 if [[ "$IS_WINDOWS" == true ]]; then
     # Windows: Use -r with explicit exit + log output
-    matlab.exe -nosplash -nodesktop -wait -r "try; addpath(fullfile(pwd,'matlab','preprocessing')); run_preprocessing; catch e; fprintf('ERROR: %s\n', e.message); for i=1:length(e.stack); fprintf('  %s (line %d)\n', e.stack(i).file, e.stack(i).line); end; end; exit" 2>&1 | tee matlab_preprocessing.log
-    
+    cmd.exe /c "\"$MATLAB_EXE_WIN\" -batch \"cd('$(cygpath -w "$SCRIPT_DIR" | tr -d '\r' | sed 's/\\/\\\\/g')'); addpath(genpath(pwd)); run('matlab/preprocessing/run_preprocessing.m');\""
+
     # Check if preprocessing succeeded by verifying output files
     if [[ ! -f "$PROCESSED_DIR/GDP_SouthAmerica_1990_2019.csv" ]]; then
         echo "ERROR: Preprocessing failed - check matlab_preprocessing.log"
@@ -62,8 +81,8 @@ echo
 echo "=== STEP 2: MATLAB model ==="
 
 if [[ "$IS_WINDOWS" == true ]]; then
-    matlab.exe -nosplash -nodesktop -wait -r "try; addpath(fullfile(pwd,'matlab','model')); run_model; catch e; fprintf('ERROR: %s\n', e.message); for i=1:length(e.stack); fprintf('  %s (line %d)\n', e.stack(i).file, e.stack(i).line); end; end; exit" 2>&1 | tee matlab_model.log
-    
+   cmd.exe /c "\"$MATLAB_EXE_WIN\" -batch \"cd('$(cygpath -w "$SCRIPT_DIR" | tr -d '\r' | sed 's/\\/\\\\/g')'); addpath(genpath(pwd)); run('matlab/model/run_model.m');\""
+
     if [[ ! -f "$PRED_CSV" ]]; then
         echo "ERROR: Model execution failed - check matlab_model.log"
         cat matlab_model.log || echo "Could not read log file"
@@ -125,8 +144,9 @@ fi
 echo "=== STEP 4: MATLAB plots ==="
 
 if [[ "$IS_WINDOWS" == true ]]; then
-    matlab.exe -nosplash -nodesktop -wait -r "try; addpath(fullfile(pwd,'matlab','plots')); run_plot_migration_results; catch e; fprintf('ERROR: %s\n', e.message); for i=1:length(e.stack); fprintf('  %s (line %d)\n', e.stack(i).file, e.stack(i).line); end; end; exit" 2>&1 | tee matlab_plots.log
-else
+   cmd.exe /c "\"$MATLAB_EXE_WIN\" -batch \"cd('$(cygpath -w "$SCRIPT_DIR" | tr -d '\r' | sed 's/\\/\\\\/g')'); addpath(genpath(pwd)); run('matlab/plots/run_plot_migration_results.m');\""
+
+   else
     $MATLAB_CMD "addpath(fullfile(pwd,'matlab','plots')); run_plot_migration_results"
 fi
 
