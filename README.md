@@ -215,11 +215,14 @@ Since the model uses lagged migration values, predictions are generated year-by-
 No need to build anything
 
 ## Execute
-```bash
-chmod +x run_project.sh
-./run_project.sh
-``` 
 
+Download the yip folder of the project
+on the bash access the project folder : (example): cd /home/username/Downloads/CMT-Migration-main
+then execute : 
+chmod +x run_project.sh ; 
+./run_project.sh ; 
+
+``` 
 
 Windows Note: The script creates log files (`matlab_preprocessing.log`, `matlab_model.log`, `matlab_plots.log`) to capture all MATLAB output. Check these files if errors occur.
 

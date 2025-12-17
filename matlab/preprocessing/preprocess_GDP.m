@@ -3,7 +3,7 @@ function preprocess_GDP(rawDir, processedDir)
 
 
 
-inputFile = fullfile(rawDir, 'GDP_Worldbank_Unchanged (1).csv');
+inputFile = fullfile(rawDir, 'GDP_Worldbank_Unchanged.csv');
 fid = fopen(inputFile,'r','n','UTF-8');
 if fid == -1
     error('Impossibile aprire il file: %s', inputFile);
