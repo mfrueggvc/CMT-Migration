@@ -3,57 +3,6 @@
 ## Project Overview
 
 This project implements a multi-linear regression model with autoregressive components to predict net migration flows in South American countries from 2015 to 2019, using socioeconomic data from 1990 to 2014 as training period.
-
-### HOW TO USE  : 
-
-chmod +x run_project.sh
-./run_project.sh
-
-
-# Key Features:
-- Feature engineering with economic indicators (GDP growth, unemployment, education, homicide rates)
-- Autoregressive approach with lagged migration variables
-- Interactive term modeling (e.g., crime × unemployment)
-- Comprehensive evaluation with MAE, MBE, and Median Absolute Error
-- Automated visualization pipeline
-
-------  REMOVE BEFORE SUBMISSION--------------------------------------------------------------------------
-
-
-### **Exclude
-- Generated outputs (`data/processed/`, `results/`)
-
----
-
-
--------------------------------------------------------------------------------------------------------------------------------------
-
-
-##  System Requirements
-
-### **Software Dependencies:**
-- **MATLAB** (R2020a or later recommended)
-- **GCC Compiler** (for C evaluation module)
-- **Bash Shell** (Linux/Mac) or **Command Prompt** (Windows)
-
---- 
-
----
-
-
-
-### **All Platforms (Recommended):**
-```bash
-chmod +x run_project.sh
-./run_project.sh
-```
-
-
-
-> **Windows Note:** The script creates log files (`matlab_preprocessing.log`, `matlab_model.log`, `matlab_plots.log`) to capture all MATLAB output. Check these files if errors occur.
-
----
-
 ##  Project Structure
 
 ```
@@ -254,53 +203,34 @@ Since the model uses lagged migration values, predictions are generated year-by-
 | **R²** | Coefficient of Determination | Training fit quality (0-1) |
 | **RMSE** | Root Mean Square Error | Penalizes large errors |
 
----
 
-# Troubleshooting
+### RUNNING THE PROGRAMM : 
 
-### **Error: "Missing predictions file"**
-**Cause:** MATLAB model did not complete.  
-**Solution:**
-1. Check file names in `data/processed/`
-2. Verify no missing data in raw CSV files
-3. Run `run_model.m` manually in MATLAB to see errors
+## Software Dependencies:
+- **MATLAB** (R2020a or later recommended)
+- **GCC Compiler** (for C evaluation module)
+- **Bash Shell** (Linux/Mac) or **Command Prompt** (Windows)
 
+## BUILD: 
+No need to build anything
 
-
----
-
-### **MATLAB Hangs or Shows No Output (Windows)**
-**Cause:** Git Bash + MATLAB communication issue.  
-**Solution:**
-1. run manually from MATLAB Desktop
-2. OR use CMD/PowerShell instead of Git Bash
-
----
-
-### **MATLAB Freezes When Opening Folder**
-**Cause:** OneDrive sync conflict or too many files.  
-**Solution:**
-1. Don't use "Open Folder" - use only `cd` command
-2. Move project outside OneDrive:
+## Execute
 ```bash
-cp -r CMT-Migration ~/Desktop/CMT-Migration
-```
-3. Exclude folder from OneDrive sync
-
----
-
-### **GCC Not Found**
-**Solution:**
-- **Windows:** Install MinGW or use WSL
-- **macOS:** `xcode-select --install`
-- **Linux:** `sudo apt install build-essential`
+chmod +x run_project.sh
+./run_project.sh
+``` 
 
 
+Windows Note: The script creates log files (`matlab_preprocessing.log`, `matlab_model.log`, `matlab_plots.log`) to capture all MATLAB output. Check these files if errors occur.
 
-____
+###Contributors 
+Students : Mirto Regazzoni, Mark Ruegg, Aimé Couty
+with the help of generative AI
 
 
-### References
+### Exclude
+- Generated outputs (`data/processed/`, `results/`)
+
 
 # Data Sources:
 - GDP, Unemployment, Homicide: World Bank Open Data
@@ -313,14 +243,9 @@ ____
 - Evaluation metrics standard in time series forecasting
 
 ---
+--- 
 
-##  Author
-
-**Project:** Computational Methods and Tools - Migration Analysis  
-**Institution:** EPFL  
-**Year:** 2025  
-**Students :** Mirto Regazzoni, Mark Ruegg, Aimé Couty
-
+--- 
 ---
 
 ## License
