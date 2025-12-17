@@ -207,7 +207,7 @@ Since the model uses lagged migration values, predictions are generated year-by-
 ### RUNNING THE PROGRAMM : 
 
 ## Software Dependencies:
-- **MATLAB** (R2020a or later recommended)
+- **MATLAB** - MATLAB R2021b (command available as `matlab-2021b` on Linux systems)
 - **GCC Compiler** (for C evaluation module)
 - **Bash Shell** (Linux/Mac) or **Command Prompt** (Windows)
 
@@ -264,9 +264,6 @@ This project is submitted as coursework. All data used is publicly available fro
 **Total:** ~5-10 minutes on a standard laptop
 
 ---
-
-##  Notes for Reviewers
- **Missing dependencies:** All required software is listed in "System Requirements"
 
 
 ### ** IMPORTANT ** : 

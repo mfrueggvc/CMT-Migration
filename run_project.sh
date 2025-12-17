@@ -23,25 +23,31 @@ TRUTH_CSV="$GT_DIR/NetMigration_SouthAmerica_1990_2019.csv"
 PRED_CSV="$PRED_DIR/predicted_migration_all_countries.csv"
 OUT_CSV="$EVAL_DIR/out.csv"
 
-# ---- Helper function: Run MATLAB ----
 run_matlab() {
     local script_path="$1"
     local log_name="$2"
-    
+
     echo "Executing MATLAB script: $script_path"
-    
-    # Try different MATLAB invocation methods
-    if command -v matlab.exe &> /dev/null; then
-        # Windows with Git Bash
-        matlab.exe -batch "cd('$(cygpath -w "$SCRIPT_DIR")'); addpath(genpath(pwd)); run('$script_path');" 2>&1 | tee "${log_name}.log"
-    elif command -v matlab &> /dev/null; then
-        # Unix/Mac or Windows with MATLAB in PATH
-        matlab-2021b -batch "cd('$SCRIPT_DIR'); addpath(genpath(pwd)); run('$script_path');" 2>&1 | tee "${log_name}.log"
-    else
-        echo "ERROR: MATLAB not found in PATH"
-        echo "Please add MATLAB to your system PATH or run manually"
-        exit 1
+
+    # Windows (Git Bash)
+    if command -v matlab.exe >/dev/null 2>&1; then
+        matlab.exe -batch "cd('$(cygpath -w "$SCRIPT_DIR")'); addpath(genpath(pwd)); run('$script_path');" \
+          2>&1 | tee "${log_name}.log"
+        return
     fi
+
+    # Linux / macOS / university machines (EXPECTED: matlab-2021b)
+    if command -v matlab-2021b >/dev/null 2>&1; then
+        matlab-2021b -batch "cd('$SCRIPT_DIR'); addpath(genpath(pwd)); run('$script_path');" \
+          2>&1 | tee "${log_name}.log"
+        return
+    fi
+
+    echo "ERROR: matlab-2021b not found in PATH."
+    echo "This project requires MATLAB R2021b."
+    echo "Please load MATLAB or add it to PATH, e.g.:"
+    echo "  export PATH=\"/usr/local/MATLAB/R2021b/bin:\$PATH\""
+    exit 1
 }
 
 # ---- 1) MATLAB preprocessing ----
