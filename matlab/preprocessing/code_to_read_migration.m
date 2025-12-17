@@ -4,7 +4,7 @@
 % Extracts 12 South American countries
 % ============================================================
 
-filename = 'net_migration.csv'; % <--- IMPORTANT : NOM DU FICHIER
+filename = 'Net_Migration_Worldbank_Unchanged.csv'; 
 
 %% 1. Read file line-by-line (robust)
 fid = fopen(filename,'r','n','UTF-8');
@@ -24,10 +24,10 @@ raw_lines{1} = regexprep(raw_lines{1}, '^\xEF\xBB\xBF', '');
 
 %% 4. Extract header (line 3)
 header_line = raw_lines{3};
-header_line = strrep(header_line,'"','');   % remove quotes
+header_line = strrep(header_line,'"','');   
 column_names = strsplit(header_line, ',');
 
-%% 5. Extract data lines (from line 4 onward)
+%% 5. Extract data lines 
 data_lines = raw_lines(4:end);
 
 %% 6. Split each data line by commas

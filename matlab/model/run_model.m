@@ -4,10 +4,10 @@ fprintf('=== Migration Prediction Model for South America ===\n');
 fprintf('Training period: 1990-2014\n'); 
 fprintf('Prediction period: 2015-2019\n\n'); 
 
-thisFile    = mfilename('fullpath');        % .../matlab/model/run_model.m
-modelDir    = fileparts(thisFile);         % .../matlab/model
-matlabDir   = fileparts(modelDir);         % .../matlab
-projectRoot = fileparts(matlabDir);        % .../CMT-Migration
+thisFile    = mfilename('fullpath');   % ...\CMT-Migration\matlab\model\run_model.m
+modelDir    = fileparts(thisFile);     % ...\CMT-Migration\matlab\model
+matlabDir   = fileparts(modelDir);     % ...\CMT-Migration\matlab
+projectRoot = fileparts(matlabDir);  
 
 dataDir    = fullfile(projectRoot, 'data', 'processed');
 resultsDir = fullfile(projectRoot, 'results', 'predictions');
@@ -390,42 +390,21 @@ for c = 1:length(countries)
             metricRow.RSquared, metricRow.AdjRSquared, metricRow.RMSE_Train, metricRow.NumObservations); 
 end 
 
-% CONTINENTAL AGGREGATION
-
-fprintf('=== Aggregating South America Results ===\n'); 
-
-years = unique(allPredictions.Year); 
-continentalPred = table(); 
-
-for y = 1:length(years) 
-    yearData = allPredictions(allPredictions.Year == years(y), :); 
-    
-    row = table(); 
-    row.Year = years(y); 
-    row.TotalPredictedMigration = sum(yearData.PredictedNetMigration); 
-    %row.TotalGDP = sum(yearData.GDP); 
-    %row.AvgUnemployment = mean(yearData.Unemployment); 
-    %row.AvgHomicide = mean(yearData.Homicide);
-    %row.AvgSchoolYears = mean(yearData.SchoolYears); 
-    %row.NumCountries = height(yearData); 
-    
-    continentalPred = [continentalPred; row]; 
-end 
 
 %% SAVE RESULTS TO CSV
 
 allPredictions.PredictedNetMigration = round(allPredictions.PredictedNetMigration);
-continentalPred.TotalPredictedMigration = round(continentalPred.TotalPredictedMigration);
+
 
 writetable(allPredictions,  fullfile(resultsDir, 'predicted_migration_all_countries.csv'));
-writetable(continentalPred, fullfile(resultsDir, 'predicted_migration_south_america.csv'));
+
 writetable(allMetrics,      fullfile(resultsDir, 'model_quality_metrics.csv'));
 
 fprintf('\n=== Results Saved Successfully ===\n');
 fprintf('Output directory: %s\n\n', resultsDir);
 fprintf('Generated files:\n');
 fprintf('  1. predicted_migration_all_countries.csv (Country-level predictions)\n');
-fprintf('  2. predicted_migration_south_america.csv (Continental aggregation)\n');
+
 fprintf('  3. model_quality_metrics.csv (Model R² and fit statistics)\n\n');
 
 %%  SUMMARY STATISTICS 
@@ -436,86 +415,9 @@ fprintf('Average R²: %.4f\n', mean([allMetrics.RSquared]));
 fprintf('Average Adjusted R²: %.4f\n', mean([allMetrics.AdjRSquared])); 
 fprintf('Average Training RMSE: %.0f\n\n', mean([allMetrics.RMSE_Train])); 
 
-fprintf('=== Continental Predictions (2015-2019) ===\n'); 
-disp(continentalPred); 
-fprintf('\n'); 
 
-%% VISUALIZATION
-% 
-% % Figure 1: Model Quality by Country 
-% figure('Position', [100, 100, 1200, 500]); 
-% 
-% subplot(1,2,1); 
-% bar(categorical(allMetrics.Country), [allMetrics.RSquared]); 
-% ylabel('R² (Model Fit)', 'FontSize', 12); 
-% xlabel('Country', 'FontSize', 12); 
-% title('Training Model Quality by Country', 'FontSize', 14, 'FontWeight', 'bold'); 
-% ylim([0, 1]); 
-% grid on; 
-% xtickangle(45); 
-% 
-% subplot(1,2,2); 
-% bar(categorical(allMetrics.Country), [allMetrics.RMSE_Train]); 
-% ylabel('RMSE (Training)', 'FontSize', 12); 
-% xlabel('Country', 'FontSize', 12); 
-% title('Prediction Error by Country', 'FontSize', 14, 'FontWeight', 'bold'); 
-% grid on; 
-% xtickangle(45); 
-% 
-% % Figure 2: Continental Trends
-% figure('Position', [100, 100, 1000, 800]); 
-% 
-% subplot(3,1,1); 
-% plot(continentalPred.Year, continentalPred.TotalPredictedMigration, '-ro', ...
-%      'LineWidth', 2, 'MarkerSize', 8, 'MarkerFaceColor', 'r'); 
-% xlabel('Year', 'FontSize', 12); 
-% ylabel('Total Net Migration', 'FontSize', 12); 
-% title('South America - Predicted Total Net Migration (2015-2019)', 'FontSize', 14, 'FontWeight', 'bold'); 
-% grid on; 
-% 
-% subplot(3,1,2); 
-% yyaxis left; 
-% plot(continentalPred.Year, continentalPred.TotalGDP, '-bs', 'LineWidth', 2, 'MarkerSize', 8); 
-% ylabel('Total GDP', 'FontSize', 12); 
-% yyaxis right; 
-% plot(continentalPred.Year, continentalPred.AvgUnemployment, '-rd', 'LineWidth', 2, 'MarkerSize', 8); 
-% ylabel('Avg Unemployment Rate (%)', 'FontSize', 12); 
-% xlabel('Year', 'FontSize', 12); 
-% title('Economic Indicators - South America', 'FontSize', 14, 'FontWeight', 'bold'); 
-% legend('Total GDP', 'Avg Unemployment', 'Location', 'best'); 
-% grid on; 
-% 
-% subplot(3,1,3);
-% plot(continentalPred.Year, continentalPred.AvgHomicide, '-md', ...
-%      'LineWidth', 2, 'MarkerSize', 8, 'MarkerFaceColor', 'm');
-% xlabel('Year', 'FontSize', 12);
-% ylabel('Avg Homicide Rate (per 100k)', 'FontSize', 12);
-% title('Safety Indicator - South America', 'FontSize', 14, 'FontWeight', 'bold');
-% grid on;
-% 
-% % Figure 3: Individual Country Predictions 
-% figure('Position', [100, 100, 1400, 800]); 
-% [~, sortIdx] = sort([allMetrics.RSquared], 'descend'); 
-% displayCountries = min(9, height(allMetrics)); 
-% 
-% for i = 1:displayCountries 
-%     subplot(3, 3, i); 
-%     countryData = allPredictions(strcmpi(allPredictions.Country, allMetrics.Country{sortIdx(i)}), :); 
-% 
-%     plot(countryData.Year, countryData.PredictedNetMigration, '-ro', ...
-%          'LineWidth', 2, 'MarkerSize', 8, 'MarkerFaceColor', 'r'); 
-% 
-%     title(sprintf('%s (R²=%.3f)', char(allMetrics.Country{sortIdx(i)}), ...
-%           allMetrics.RSquared(sortIdx(i))), 'FontSize', 11, 'FontWeight', 'bold'); 
-%     xlabel('Year', 'FontSize', 10); 
-%     ylabel('Predicted Migration', 'FontSize', 10); 
-%     grid on; 
-% 
-%     hold on; 
-%     yline(0, '--k', 'LineWidth', 0.5);  % Reference line at zero
-% end 
-%%
-sgtitle('Country-Level Migration Predictions (2015-2019)', 'FontSize', 14, 'FontWeight', 'bold'); 
 
-fprintf('=== Visualization Complete ===\n'); 
 fprintf('All predictions generated successfully!\n');
+
+disp(projectRoot)
+disp(dataDir)
