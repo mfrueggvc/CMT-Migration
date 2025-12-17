@@ -2,16 +2,16 @@
 
 ## Project Overview
 
-This project implements a **multi-linear regression model** with autoregressive components to predict net migration flows in South American countries from 2015 to 2019, using socioeconomic data from 1990 to 2014 as training period.
+This project implements a multi-linear regression model with autoregressive components to predict net migration flows in South American countries from 2015 to 2019, using socioeconomic data from 1990 to 2014 as training period.
 
-**Key Features:**
+# Key Features:
 - Feature engineering with economic indicators (GDP growth, unemployment, education, homicide rates)
 - Autoregressive approach with lagged migration variables
 - Interactive term modeling (e.g., crime × unemployment)
 - Comprehensive evaluation with MAE, MBE, and Median Absolute Error
 - Automated visualization pipeline
 
-------  REMOVE BEFORE SUBMISSION
+------  REMOVE BEFORE SUBMISSION--------------------------------------------------------------------------
 ### **Recommended Structure:**
 ```
 CMT_Migration_Project.zip
@@ -38,6 +38,8 @@ CMT_Migration_Project.zip
 - [ ] README updated with any special instructions
 - [ ] File names corrected (no duplicates like "(1)")
 - [ ] Sample outputs included (optional but recommended)
+-------------------------------------------------------------------------------------------------------------------------------------
+
 
 ##  System Requirements
 
@@ -123,83 +125,80 @@ CMT-Migration/
         └── Graphs/             # PNG visualizations
 ```
 
----
 
 
+### Step 1 : Preprocess raw data
+matlab
+addpath(fullfile(pwd,'matlab','preprocessing'))
+run_preprocessing.m
+
+# Expected Output
+- `data/processed/ ------------------------------------------------------------------------------------------------------------------------------
 
 
-
-### **Step 2: Run Prediction Model**
-```matlab
+### Step 2: Run Prediction Model
+matlab
 addpath(fullfile(pwd,'matlab','model'))
-run_model
-```
+run_model.m
 
-**Expected Output:**
+
+# Expected Output:
 - `results/predictions/predicted_migration_all_countries.csv`
 - `results/predictions/model_quality_metrics.csv`
-- `results/evaluation/
-- `results/evaluation/   OUTPUT FROM MARK 
+
 ---
 
 ### **Step 3: Evaluate Predictions (Terminal/CMD)**
 
-**Linux/Mac:**
-```bash
+# Linux/Mac:
+bash
 gcc -O2 -Wall -Wextra -o c/run_comparison c/run_comparison.c -lm
 
 ./c/run_comparison \
   "data/ground_truth/migration_truth.csv" \
   "results/predictions/predicted_migration_all_countries.csv" \
   "results/evaluation/out.csv"
-```
 
-**Windows (CMD):**
-```cmd
+
+ # Windows (CMD):
+cmd
 gcc -O2 -Wall -Wextra -o c\run_comparison.exe c\run_comparison.c -lm
 
 c\run_comparison.exe ^
   "data\ground_truth\migration_truth.csv" ^
   "results\predictions\predicted_migration_all_countries.csv" ^
   "results\evaluation\out.csv"
-```
 
-**Expected Output:**
+
+ # Expected Output: -------------------------------------------------------------------------------------------------------------------------------------
 - `results/evaluation/out.csv` (detailed residuals)
 - `results/evaluation/summary_out.csv` (MAE, MBE, MedianAE per country)
+  ARE THIS THE FILES OUTPUT OF MARFK ??? 
 
 ---
 
-### **Step 4: Generate Visualizations**
-```matlab
+### Step 4: Generate Visualizations
+matlab
 addpath(fullfile(pwd,'matlab','plots'))
 run_plot_migration_results
-```
 
-**Expected Output:**
-- PNG graphs in `results/evaluation/Graphs/`
 
----
+# Expected Output:
+- PNG graphs in `results/evaluation/Graphs/` ----------------------------------------------------------------------------------------------------
 
-##  Configuration
 
-### **Ground Truth File**
-Edit `run_project.sh` (line 20):
-```bash
-TRUTH_CSV="$GT_DIR/your_truth_file_name.csv"
-```
 
-**Required Format (Wide):**
-```csv
+# Required Format (Wide):
+csv
 Year,Argentina,Bolivia,Brazil,Chile,Colombia,...
 2015,12000,5000,30000,8000,15000,...
 2016,11500,4800,28000,7500,14000,...
 ...
-```
+
 
 ---
 
-### **Raw Data Files**
+## Raw Data Files
 If your files in `data/raw/` have different names, update the `readtable()` calls in:
 - `matlab/preprocessing/preprocess_GDP.m`
 - `matlab/preprocessing/preprocess_Schooling.m`
@@ -252,12 +251,12 @@ If your files in `data/raw/` have different names, update the `readtable()` call
 ### **Model Type:**
 Multi-linear regression with interaction terms, fitted using ordinary least squares (OLS).
 
-### **Iterative Prediction:**
-Since the model uses lagged migration values, predictions are generated **year-by-year** (2015, then 2016, etc.), feeding each year's prediction back into the model as a lag variable.
+## **Iterative Prediction:**
+Since the model uses lagged migration values, predictions are generated year-by-year (2015, then 2016, etc.), feeding each year's prediction back into the model as a lag variable.
 
 ---
 
-##  Evaluation Metrics
+#  Evaluation Metrics
 
 | Metric | Description | Interpretation |
 |--------|-------------|----------------|
@@ -269,7 +268,7 @@ Since the model uses lagged migration values, predictions are generated **year-b
 
 ---
 
-##  Troubleshooting
+# Troubleshooting
 
 ### **Error: "Missing predictions file"**
 **Cause:** MATLAB model did not complete.  
@@ -277,8 +276,6 @@ Since the model uses lagged migration values, predictions are generated **year-b
 1. Check file names in `data/processed/`
 2. Verify no missing data in raw CSV files
 3. Run `run_model.m` manually in MATLAB to see errors
-
-
 
 
 
@@ -310,24 +307,19 @@ cp -r CMT-Migration ~/Desktop/CMT-Migration
 - **macOS:** `xcode-select --install`
 - **Linux:** `sudo apt install build-essential`
 
----
-
-## Submission Package
 
 
-_____ 
+____
 
 
----
+### References
 
-##  References
-
-**Data Sources:**
+# Data Sources:
 - GDP, Unemployment, Homicide: World Bank Open Data
 - Education: UNDP Human Development Reports
 - Migration: UN DESA Population Division
 
-**Methodology:**
+# Methodology:
 - Feature engineering inspired by econometric migration models
 - Autoregressive approach follows Box-Jenkins methodology
 - Evaluation metrics standard in time series forecasting
@@ -339,7 +331,7 @@ _____
 **Project:** Computational Methods and Tools - Migration Analysis  
 **Institution:** EPFL  
 **Year:** 2025  
-
+**Students :** Mirto Regazzoni, Mark Ruegg, Aimé Couty
 
 ---
 
@@ -362,7 +354,9 @@ This project is submitted as coursework. All data used is publicly available fro
 
 ##  Notes for Reviewers
  **Missing dependencies:** All required software is listed in "System Requirements"
- # ** IMPORTANT ** : 
+
+
+### ** IMPORTANT ** : 
    On Windows systems using individual MATLAB licenses, headless execution via shell scripts may fail due to licensing restrictions. In this case, the project can be executed by launching MATLAB manually and running the provided master script.
 
 **Last Updated:** December 2025  
