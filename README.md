@@ -30,14 +30,7 @@ CMT_Migration_Project.zip
 
 ---
 
-## Pre-Submission Checklist
 
-- [ ] All raw data files present in `data/raw/`
-- [ ] Ground truth file specified in script
-- [ ] Script tested at least once successfully
-- [ ] README updated with any special instructions
-- [ ] File names corrected (no duplicates like "(1)")
-- [ ] Sample outputs included (optional but recommended)
 -------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -133,7 +126,7 @@ addpath(fullfile(pwd,'matlab','preprocessing'))
 run_preprocessing.m
 
 # Expected Output
-- `data/processed/ ------------------------------------------------------------------------------------------------------------------------------
+- `data/processed/ 
 
 
 ### Step 2: Run Prediction Model
@@ -170,10 +163,10 @@ c\run_comparison.exe ^
   "results\evaluation\out.csv"
 
 
- # Expected Output: -------------------------------------------------------------------------------------------------------------------------------------
+ # Expected Output: 
 - `results/evaluation/out.csv` (detailed residuals)
 - `results/evaluation/summary_out.csv` (MAE, MBE, MedianAE per country)
-  ARE THIS THE FILES OUTPUT OF MARFK ??? 
+  
 
 ---
 
@@ -184,8 +177,8 @@ run_plot_migration_results
 
 
 # Expected Output:
-- PNG graphs in `results/evaluation/Graphs/` ----------------------------------------------------------------------------------------------------
-
+- PNG graphs in `results/evaluation/TimeSeriesCountr.png`
+                `results/evaluation/Summary_Accuracy.png`
 
 
 # Required Format (Wide):
