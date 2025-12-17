@@ -23,7 +23,7 @@ Tg = stack(Tg, varCountries, 'NewDataVariableName', 'GDP', 'IndexVariableName', 
 Tg.Country = upper(strtrim(string(Tg.Country))); 
 
 % Load Schooling 
-Ts = readtable(fullfile(dataDir,"Schooling_SouthAmerica_1990_2019 (1).csv")); 
+Ts = readtable(fullfile(dataDir,"Schooling_SouthAmerica_1990_2019.csv")); 
 varCountries = Ts.Properties.VariableNames(2:end); 
 Ts = stack(Ts, varCountries, 'NewDataVariableName', 'SchoolYears', 'IndexVariableName', 'Country'); 
 Ts.Country = upper(strtrim(string(Ts.Country))); 
