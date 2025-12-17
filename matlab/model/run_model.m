@@ -43,7 +43,7 @@ Tn = stack(Tn, varCountriesN, 'NewDataVariableName', 'NetMigration', 'IndexVaria
 Tn.Country = upper(strtrim(string(Tn.Country))); 
 
 % Load Homicide Rate (per 100k population)
-Th = readtable(fullfile(dataDir,'homicide_per_100k.csv')); 
+Th = readtable(fullfile(dataDir,'Homicide_SouthAmerica_1990_2019.csv')); 
 varCountries = Th.Properties.VariableNames(2:end); 
 Th = stack(Th, varCountries, 'NewDataVariableName', 'Homicide', 'IndexVariableName', 'Country'); 
 Th.Country = upper(strtrim(string(Th.Country))); 
