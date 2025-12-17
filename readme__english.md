@@ -30,7 +30,7 @@ CMT_Migration_Project.zip
 
 ---
 
-## ✅ Pre-Submission Checklist
+## Pre-Submission Checklist
 
 - [ ] All raw data files present in `data/raw/`
 - [ ] Ground truth file specified in script
