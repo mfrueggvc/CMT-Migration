@@ -36,7 +36,7 @@ run_matlab() {
         matlab.exe -batch "cd('$(cygpath -w "$SCRIPT_DIR")'); addpath(genpath(pwd)); run('$script_path');" 2>&1 | tee "${log_name}.log"
     elif command -v matlab &> /dev/null; then
         # Unix/Mac or Windows with MATLAB in PATH
-        matlab -batch "cd('$SCRIPT_DIR'); addpath(genpath(pwd)); run('$script_path');" 2>&1 | tee "${log_name}.log"
+        matlab-2021b -batch "cd('$SCRIPT_DIR'); addpath(genpath(pwd)); run('$script_path');" 2>&1 | tee "${log_name}.log"
     else
         echo "ERROR: MATLAB not found in PATH"
         echo "Please add MATLAB to your system PATH or run manually"
