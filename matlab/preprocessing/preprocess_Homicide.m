@@ -4,7 +4,7 @@ function preprocess_Homicide(rawDir, processedDir)
 %  Indicator already per 100,000 inhabitants
 % ===============================================
 
-clear; clc;
+
 
 %% ===============================================
 %  1. PARAMÈTRES DE BASE
@@ -44,8 +44,11 @@ yearVars = "x" + string(years);   % "x1990" ... "x2019"
 %% ===============================================
 %  2. LECTURE BRUTE DU CSV WORLD BANK
 % ===============================================
-Hraw = readtable('Homicide_Worldbank_Unchanged.csv', ...
+inputFile = fullfile(rawDir, 'Homicide_Worldbank_Unchanged.csv');
+
+Hraw = readtable(inputFile, ...
                  'PreserveVariableNames', true);
+
 
 % La première ligne contient les vrais noms de colonnes
 headerH = string(table2cell(Hraw(1, :)));
@@ -95,7 +98,9 @@ end
 %% ===============================================
 %  8. SAUVEGARDE
 % ===============================================
-writetable(HomicideTable, 'Homicide_SouthAmerica_1990_2019.csv');
+outputFile = fullfile(processedDir, 'Homicide_SouthAmerica_1990_2019.csv');
+writetable(HomicideTable, outputFile);
+
 
 disp('✔ Homicide dataset créé avec succès !');
 disp(HomicideTable(1:10, :));
