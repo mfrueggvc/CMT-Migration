@@ -4,6 +4,12 @@
 
 This project implements a multi-linear regression model with autoregressive components to predict net migration flows in South American countries from 2015 to 2019, using socioeconomic data from 1990 to 2014 as training period.
 
+### HOW TO USE  : 
+
+chmod +x run_project.sh
+./run_project.sh
+
+
 # Key Features:
 - Feature engineering with economic indicators (GDP growth, unemployment, education, homicide rates)
 - Autoregressive approach with lagged migration variables

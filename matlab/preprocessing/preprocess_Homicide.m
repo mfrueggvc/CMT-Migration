@@ -1,6 +1,14 @@
 function preprocess_Homicide(rawDir, processedDir)
-% Build homicide rate table for South America (1990–2019) and save CSV.
+%  PROCESS WORLD BANK HOMICIDE RATE (1990–2019)
+%  Output format: Year × Country
+%  Indicator already per 100,000 inhabitants
+% ===============================================
 
+clear; clc;
+
+%% ===============================================
+%  1. PARAMÈTRES DE BASE
+% ===============================================
 countries = { ...
     'Argentina'
     'Bolivia'
@@ -15,64 +23,79 @@ countries = { ...
     'Uruguay'
     'Venezuela'};
 
-years    = 1990:2019;
-yearVars = "x" + string(years);
+worldbank_names = { ...
+    'Argentina'
+    'Bolivia'
+    'Brazil'
+    'Chile'
+    'Colombia'
+    'Ecuador'
+    'Guyana'
+    'Paraguay'
+    'Peru'
+    'Suriname'
+    'Uruguay'
+    'Venezuela, RB'};
 
-%% Read homicide CSV (raw World Bank export)
-Hraw = readtable(fullfile(rawDir, 'Homicide_Worldbank_Unchanged (1).csv'), ...
+years = 1990:2019;
+yearVars = "x" + string(years);   % "x1990" ... "x2019"
+
+
+%% ===============================================
+%  2. LECTURE BRUTE DU CSV WORLD BANK
+% ===============================================
+Hraw = readtable('Homicide_Worldbank_Unchanged.csv', ...
                  'PreserveVariableNames', true);
 
+% La première ligne contient les vrais noms de colonnes
 headerH = string(table2cell(Hraw(1, :)));
 Hraw.Properties.VariableNames = matlab.lang.makeValidName(headerH);
+
+% Supprimer la ligne d'en-tête
 H = Hraw(2:end, :);
 
-%% Read population CSV (only used for ordering, but kept for consistency)
-Praw = readtable(fullfile(rawDir, 'Population.csv'), ...
-                 'PreserveVariableNames', true);
-headerP = string(table2cell(Praw(1, :)));
-Praw.Properties.VariableNames = matlab.lang.makeValidName(headerP);
-POP = Praw(2:end, :);
 
-%% Filter the 12 countries
-wb_list = {'Argentina','Bolivia','Brazil','Chile','Colombia','Ecuador', ...
-           'Guyana','Paraguay','Peru','Suriname','Uruguay','Venezuela, RB'};
+%% ===============================================
+%  3. FILTRER LES 12 PAYS
+% ===============================================
+H_sa = H(ismember(H.CountryName, worldbank_names), :);
 
-H_sa = H(ismember(H.CountryName, wb_list), :);
-POP_sa = POP(ismember(POP.CountryName, wb_list), :);
 
-%% Reorder to match target order
-[~, idxH] = ismember(wb_list, H_sa.CountryName);
+%% ===============================================
+%  4. RÉORDONNER SELON L'ORDRE OFFICIEL
+% ===============================================
+[~, idxH] = ismember(worldbank_names, H_sa.CountryName);
 H_sa = H_sa(idxH, :);
 
-[~, idxP] = ismember(wb_list, POP_sa.CountryName);
-POP_sa = POP_sa(idxP, :); %#ok<NASGU>  % kept only to preserve logic
 
-%% Extract homicide matrix 1990–2019
-Homicide_matrix = H_sa{:, yearVars};  % 12 x N
+%% ===============================================
+%  5. EXTRAIRE LES ANNÉES 1990–2019
+% ===============================================
+Homicide_matrix = H_sa{:, yearVars};   % taille = 12 × 30
 
-%% Replace NaN with 0
+
+%% ===============================================
+%  6. GESTION DES VALEURS MANQUANTES
+% ===============================================
+% Hypothèse choisie : absence de donnée → 0 homicide reporté
 Homicide_matrix(isnan(Homicide_matrix)) = 0;
 
-%% Build final table (years in rows, one column per country)
+
+%% ===============================================
+%  7. CONSTRUIRE LE TABLEAU FINAL (ANNÉES EN LIGNES)
+% ===============================================
 HomicideTable = array2table(years', 'VariableNames', {'Year'});
 
 for i = 1:length(countries)
     country = countries{i};
-    if strcmp(country, 'Venezuela')
-        true_name = 'Venezuela__RB'; % makeValidName version
-    else
-        true_name = matlab.lang.makeValidName(country);
-    end
-    HomicideTable.(true_name) = Homicide_matrix(i, :)';
+    HomicideTable.(country) = Homicide_matrix(i, :)';
 end
 
-HomicideTable.Properties.VariableNames = strrep( ...
-    HomicideTable.Properties.VariableNames, 'Venezuela__RB', 'Venezuela');
 
-outCsv = fullfile(processedDir, 'homicide_per_100k (3).csv');
-writetable(HomicideTable, outCsv);
+%% ===============================================
+%  8. SAUVEGARDE
+% ===============================================
+writetable(HomicideTable, 'Homicide_SouthAmerica_1990_2019.csv');
 
-disp('>>> homicide_per_100k (3).csv created successfully <<<');
-disp(size(HomicideTable));
-
-end
+disp('✔ Homicide dataset créé avec succès !');
+disp(HomicideTable(1:10, :));
