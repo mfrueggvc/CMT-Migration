@@ -29,26 +29,25 @@ run_matlab() {
 
     echo "Executing MATLAB script: $script_path"
 
-    # Windows (Git Bash)
-    if command -v matlab.exe >/dev/null 2>&1; then
-        matlab.exe -batch "cd('$(cygpath -w "$SCRIPT_DIR")'); addpath(genpath(pwd)); run('$script_path');" \
-          2>&1 | tee "${log_name}.log"
-        return
-    fi
-
-    # Linux / macOS / university machines (EXPECTED: matlab-2021b)
+    # Linux / ENAC system: REQUIRED matlab-2021b
     if command -v matlab-2021b >/dev/null 2>&1; then
         matlab-2021b -batch "cd('$SCRIPT_DIR'); addpath(genpath(pwd)); run('$script_path');" \
           2>&1 | tee "${log_name}.log"
         return
     fi
 
-    echo "ERROR: matlab-2021b not found in PATH."
-    echo "This project requires MATLAB R2021b."
-    echo "Please load MATLAB or add it to PATH, e.g.:"
-    echo "  export PATH=\"/usr/local/MATLAB/R2021b/bin:\$PATH\""
+    # Windows Git Bash fallback
+    if command -v matlab.exe >/dev/null 2>&1; then
+        matlab.exe -batch "cd('$(cygpath -w "$SCRIPT_DIR")'); addpath(genpath(pwd)); run('$script_path');" \
+          2>&1 | tee "${log_name}.log"
+        return
+    fi
+
+    echo "ERROR: MATLAB R2021b not found in PATH."
+    echo "Expected command: matlab-2021b"
     exit 1
 }
+
 
 # ---- 1) MATLAB preprocessing ----
 echo "=== STEP 1: MATLAB preprocessing ==="
