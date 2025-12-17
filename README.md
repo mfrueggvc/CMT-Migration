@@ -64,7 +64,7 @@ CMT-Migration/
 
 
 
-### Step 1 : Preprocess raw data
+## Step 1 : Preprocess raw data
 matlab
 addpath(fullfile(pwd,'matlab','preprocessing'))
 run_preprocessing.m
@@ -73,7 +73,7 @@ run_preprocessing.m
 - `data/processed/ 
 
 
-### Step 2: Run Prediction Model
+## Step 2: Run Prediction Model
 matlab
 addpath(fullfile(pwd,'matlab','model'))
 run_model.m
@@ -135,13 +135,7 @@ Year,Argentina,Bolivia,Brazil,Chile,Colombia,...
 
 ---
 
-## Raw Data Files
-If your files in `data/raw/` have different names, update the `readtable()` calls in:
-- `matlab/preprocessing/preprocess_GDP.m`
-- `matlab/preprocessing/preprocess_Schooling.m`
-- `matlab/preprocessing/preprocess_Unemployment.m`
-- `matlab/preprocessing/preprocess_NetMigration.m`
-- `matlab/preprocessing/preprocess_Homicide.m`
+
 
 ---
 
@@ -223,16 +217,14 @@ chmod +x run_project.sh ;
 ./run_project.sh ; 
 
 ``` 
-
-Windows Note: The script creates log files (`matlab_preprocessing.log`, `matlab_model.log`, `matlab_plots.log`) to capture all MATLAB output. Check these files if errors occur.
-
-###Contributors 
+```
+# Windows Note: The script creates log files (`matlab_preprocessing.log`, `matlab_model.log`, `matlab_plots.log`) to capture all MATLAB output. Check these files if errors occur.
+ ```
+```
+### Contributors 
 Students : Mirto Regazzoni, Mark Ruegg, Aimé Couty
 with the help of generative AI
 
-
-### Exclude
-- Generated outputs (`data/processed/`, `results/`)
 
 
 # Data Sources:
