@@ -18,21 +18,10 @@ chmod +x run_project.sh
 - Automated visualization pipeline
 
 ------  REMOVE BEFORE SUBMISSION--------------------------------------------------------------------------
-### **Recommended Structure:**
-```
-CMT_Migration_Project.zip
-├── code/               (all .m, .c, .sh files)
-├── data/raw/           (original datasets)
-├── data/ground_truth/  (validation data)
-├── results_example/    (sample outputs - optional)
-└── README.md           (this file)
-```
 
-### **Exclude:**
-- Temporary files (`.asv`, `*~`, `.DS_Store`)
-- Compiled binaries (`run_comparison`, `*.exe`)
+
+### **Exclude
 - Generated outputs (`data/processed/`, `results/`)
-- Version control (`.git/`)
 
 ---
 
