@@ -118,7 +118,7 @@ echo
 
 # ---- 4) MATLAB plots ----
 echo "=== STEP 4: MATLAB plots ==="
-run_matlab "matlab/plots/run_plot_migration_results.m" "matlab_plots"
+run_matlab "matlab/figures/run_plot_migration_results.m" "matlab_plots"
 
 echo "✓ Plots generated"
 echo
