@@ -3,10 +3,10 @@
 
 clc; clear; close all;
 
-thisFile    = mfilename('fullpath');        % .../matlab/preprocessing/run_preprocessing.m
-preprocDir  = fileparts(thisFile);         % .../matlab/preprocessing
-matlabDir   = fileparts(preprocDir);       % .../matlab
-projectRoot = fileparts(matlabDir);        % .../CMT-Migration
+thisFile    = mfilename('fullpath');        % /matlab/preprocessing/run_preprocessing.m
+preprocDir  = fileparts(thisFile);         % /matlab/preprocessing
+matlabDir   = fileparts(preprocDir);       % /matlab
+projectRoot = fileparts(matlabDir);        % /CMT-Migration
 
 rawDir       = fullfile(projectRoot, 'data', 'raw');
 processedDir = fullfile(projectRoot, 'data', 'processed');
