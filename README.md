@@ -89,7 +89,7 @@ run_model.m
 
 ### Expected Output: 
 - `results/evaluation/out.csv` #(detailed residuals)
-- `results/evaluation/summary_out.csv` #(MAE, MBE, MedianAE per country)
+- `results/evaluation/summary_out.csv` #(MAE, MBE, MedianAE, MAPE per country)
   
 
 ---
@@ -101,7 +101,7 @@ run_plot_migration_results
 
 ## Expected Output:
 - PNG graphs in `results/evaluation/TimeSeriesCountry.png`  #time series for each country
-- `results/evaluation/Summary_Metrics_Linear.png`, `results/evaluation/Summary_Metrics_LogScale.png` # two graph evaluating the accuracy of the model compared to real data
+-  `results/evaluation/Summary_Accuracy.png` # evaluating the accuracy of the model compared to real data 
 
 
 
@@ -188,10 +188,10 @@ on the bash access the project folder : (example): cd /home/username/Downloads/C
 # FINAL OUTPUTS
 - All final Outputs are generated into the folder /results. 
 - What you want to look at is all the graphs, in /results/evaluation/Graphs you will find the plots showing : 
-- 1. The graphs showing the metrics (the accuracy) of the model and the predictions, in Linear and Log scales.(Summary_Metrics_Linear.png and Summary_Metrics_LogScale.png)
+- 1. The graphs showing the metrics (the accuracy) of the model and the predictions, in Linear and Log scales.(Summary_Accuracy.png)
 - 2. The graphs showing for each Country:  the plot of real NetMigration vs predicted NetMigration and an evaluation of the prediction for that specific Country. (files named :TimeSeries_Country.png )
 - In /results/predictions you will find the numerical predictions of the model and the metrics self-evaluation from the model. 
-- In /results/evaluation you will find the two .csv tables definning the real metrics of the model (computed confronting real data).
+- In /results/evaluation you will find the two .csv tables definning the real metrics of the prediction (computed confronting real data).
 
 ``` 
 ```
@@ -234,7 +234,7 @@ This project is submitted as coursework. All data used is publicly available fro
 - **Evaluation:** <1 second
 - **Visualization:** ~10 seconds
 
-**Total:** ~5-10 minutes on a standard laptop
+**Total:** ~5-10 minutes maximum on a standard laptop
 
 ---
 
