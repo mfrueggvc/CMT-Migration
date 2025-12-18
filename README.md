@@ -104,13 +104,6 @@ run_plot_migration_results
 - `results/evaluation/Summary_Metrics_Linear.png`, `results/evaluation/Summary_Metrics_LogScale.png` # two graph evaluating the accuracy of the model compared to real data
 
 
-# Required Format (Wide):
-csv
-Year,Argentina,Bolivia,Brazil,Chile,Colombia,...
-2015,12000,5000,30000,8000,15000,...
-2016,11500,4800,28000,7500,14000,...
-...
-
 
 ---
 
@@ -192,11 +185,11 @@ on the bash access the project folder : (example): cd /home/username/Downloads/C
 - then execute : 
 - chmod +x run_project.sh ; 
 - ./run_project.sh ; 
-### FINAL OUTPUTS
+# FINAL OUTPUTS
 - All final Outputs are generated into the folder /results. 
-- what you want to look at is all the graphs, in /results/evaluation/Graphs you will find the plots showing : 
--1. The graphs showing the metrics (the accuracy) of the model and the predictions, in Linear and Log scales.(Summary_Metrics_Linear.png and Summary_Metrics_LogScale.png)
--2. The graphs showing for each Country:  the plot of real NetMigration vs predicted NetMigration and an evaluation of the prediction for that specific Country. (files named :TimeSeries_Country.png )
+- What you want to look at is all the graphs, in /results/evaluation/Graphs you will find the plots showing : 
+- 1. The graphs showing the metrics (the accuracy) of the model and the predictions, in Linear and Log scales.(Summary_Metrics_Linear.png and Summary_Metrics_LogScale.png)
+- 2. The graphs showing for each Country:  the plot of real NetMigration vs predicted NetMigration and an evaluation of the prediction for that specific Country. (files named :TimeSeries_Country.png )
 - In /results/predictions you will find the numerical predictions of the model and the metrics self-evaluation from the model. 
 - In /results/evaluation you will find the two .csv tables definning the real metrics of the model (computed confronting real data).
 
