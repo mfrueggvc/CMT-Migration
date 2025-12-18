@@ -8,7 +8,7 @@ This project implements a multi-linear regression model with autoregressive comp
 ```
 CMT-Migration/
 │
-├── run_project.sh              # Main automation script (Unix)
+├── run_project.sh              # Main automation script 
 ├── README.md                   # This file
 ├── .git/
 ├── data/
@@ -48,18 +48,17 @@ CMT-Migration/
 │       └── plot_migration_results.m
 ├── c/
 │   ├── run_comparison.c        # Evaluation module (C)
-│   └── migration_compare.c          # Compiled binary (auto-generated)
+│   └── migration_compare.c          
 │
 └── results/
     ├── predictions/            # Model outputs (CSV)
     │   ├── predicted_migration_all_countries.csv
-    │   ├── predicted_migration_south_america.csv
-    │   └── model_quality_metrics.csv
+    │   └── model_quality_metrics.csv                
     │
     └── evaluation/             # Performance metrics + plots
         ├── out.csv             # Year-by-year comparison
         ├── summary_out.csv     # Aggregated metrics (MAE, MBE, MedianAE)
-        └── Graphs/             # PNG visualizations
+        └── Graphs/             # PNG visualizations 
 ```
 
 
@@ -69,7 +68,7 @@ matlab
 addpath(fullfile(pwd,'matlab','preprocessing'))
 run_preprocessing.m
 
-# Expected Output
+### Expected Output
 - `data/processed/ 
 
 
@@ -79,50 +78,30 @@ addpath(fullfile(pwd,'matlab','model'))
 run_model.m
 
 
-# Expected Output:
-- `results/predictions/predicted_migration_all_countries.csv`
-- `results/predictions/model_quality_metrics.csv`
+### Expected Output:
+- `results/predictions/predicted_migration_all_countries.csv` #predictions for each country
+- `results/predictions/model_quality_metrics.csv` # self evaluation of the model
 
 ---
 
-### **Step 3: Evaluate Predictions (Terminal/CMD)**
-
-# Linux/Mac:
-bash
-gcc -O2 -Wall -Wextra -o c/run_comparison c/run_comparison.c -lm
-
-./c/run_comparison \
-  "data/ground_truth/migration_truth.csv" \
-  "results/predictions/predicted_migration_all_countries.csv" \
-  "results/evaluation/out.csv"
+## Step 3: Evaluate Predictions
 
 
- # Windows (CMD):
-cmd
-gcc -O2 -Wall -Wextra -o c\run_comparison.exe c\run_comparison.c -lm
-
-c\run_comparison.exe ^
-  "data\ground_truth\migration_truth.csv" ^
-  "results\predictions\predicted_migration_all_countries.csv" ^
-  "results\evaluation\out.csv"
-
-
- # Expected Output: 
-- `results/evaluation/out.csv` (detailed residuals)
-- `results/evaluation/summary_out.csv` (MAE, MBE, MedianAE per country)
+### Expected Output: 
+- `results/evaluation/out.csv` #(detailed residuals)
+- `results/evaluation/summary_out.csv` #(MAE, MBE, MedianAE per country)
   
 
 ---
 
-### Step 4: Generate Visualizations
+## Step 4: Generate Visualizations
 matlab
-addpath(fullfile(pwd,'matlab','plots'))
 run_plot_migration_results
 
 
-# Expected Output:
-- PNG graphs in `results/evaluation/TimeSeriesCountr.png`
-                `results/evaluation/Summary_Accuracy.png`
+## Expected Output:
+- PNG graphs in `results/evaluation/TimeSeriesCountry.png`  #time series for each country
+- `results/evaluation/Summary_Metrics_Linear.png`, `results/evaluation/Summary_Metrics_LogScale.png` # two graph evaluating the accuracy of the model compared to real data
 
 
 # Required Format (Wide):
@@ -134,8 +113,6 @@ Year,Argentina,Bolivia,Brazil,Chile,Colombia,...
 
 
 ---
-
-
 
 ---
 
@@ -187,7 +164,7 @@ Since the model uses lagged migration values, predictions are generated year-by-
 
 ---
 
-#  Evaluation Metrics
+## Evaluation Metrics
 
 | Metric | Description | Interpretation |
 |--------|-------------|----------------|
@@ -198,7 +175,7 @@ Since the model uses lagged migration values, predictions are generated year-by-
 | **RMSE** | Root Mean Square Error | Penalizes large errors |
 
 
-### RUNNING THE PROGRAMM : 
+# RUNNING THE PROGRAMM : 
 
 ## Software Dependencies:
 - **MATLAB** - MATLAB R2021b (command available as `matlab-2021b` on Linux systems)
@@ -210,16 +187,24 @@ No need to build anything
 
 ## Execute
 
-Download the yip folder of the project
-on the bash access the project folder : (example): cd /home/username/Downloads/CMT-Migration-main
-then execute : 
-chmod +x run_project.sh ; 
-./run_project.sh ; 
+- Download the zip folder of the project
+on the bash access the project folder : (example): cd /home/username/Downloads/CMT-Migration-main. 
+- then execute : 
+- chmod +x run_project.sh ; 
+- ./run_project.sh ; 
+### FINAL OUTPUTS
+- All final Outputs are generated into the folder /results. 
+- what you want to look at is all the graphs, in /results/evaluation/Graphs you will find the plots showing : 
+-1. The graphs showing the metrics (the accuracy) of the model and the predictions, in Linear and Log scales.(Summary_Metrics_Linear.png and Summary_Metrics_LogScale.png)
+-2. The graphs showing for each Country:  the plot of real NetMigration vs predicted NetMigration and an evaluation of the prediction for that specific Country. (files named :TimeSeries_Country.png )
+- In /results/predictions you will find the numerical predictions of the model and the metrics self-evaluation from the model. 
+- In /results/evaluation you will find the two .csv tables definning the real metrics of the model (computed confronting real data).
 
 ``` 
 ```
-# Windows Note: The script creates log files (`matlab_preprocessing.log`, `matlab_model.log`, `matlab_plots.log`) to capture all MATLAB output. Check these files if errors occur.
- ```
+## Note: 
+The script creates log files (`matlab_preprocessing.log`, `matlab_model.log`, `matlab_plots.log`) to capture all MATLAB output. Check these files if errors occur.
+```
 ```
 ### Contributors 
 Students : Mirto Regazzoni, Mark Ruegg, Aimé Couty
