@@ -180,9 +180,11 @@ No need to build anything
 
 ## Execute
 
-- Download the zip folder of the project
-on the bash access the project folder : (example): cd /home/username/Downloads/CMT-Migration-main. 
-- then execute : 
+- Download the zip folder of the project and extract it ; 
+- on the bash access the project folder: cd /home/username/Downloads/CMT-Migration-main. #use your username
+- then execute :                         #one by one
+- mkdir -p results/evaluation
+- touch results/evaluation           # these two command make the results folder visible : sometimes can become hidden because it is empty at the beginning
 - chmod +x run_project.sh ; 
 - ./run_project.sh ; 
 # FINAL OUTPUTS
