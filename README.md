@@ -58,8 +58,6 @@ CMT-Migration/
 
 
 ## Step 1 : Preprocess raw data
-matlab
-addpath(fullfile(pwd,'matlab','preprocessing'))
 run_preprocessing.m
 
 ### Expected Output
@@ -214,18 +212,17 @@ This project is submitted as coursework. All data used is publicly available fro
 
 ##  Expected Runtime
 
-- **Preprocessing:** ~30 seconds
-- **Model Training:** ~2-5 minutes (depends on # countries)
-- **Evaluation:** <1 second
-- **Visualization:** ~10 seconds
+- **Preprocessing:** < 2 minutes
+- **Model Predictions:** ~ 2-5minutes (depends on # countries)
+- **Evaluation:** < 30 second
+- **Visualization:** < 2 minutes
 
 **Total:** ~5-10 minutes maximum on a standard laptop
 
 ---
 
 
-### ** IMPORTANT ** : 
-   On Windows systems using individual MATLAB licenses, headless execution via shell scripts may fail due to licensing restrictions. In this case, the project can be executed by launching MATLAB manually and running the provided master script.
+
 
 **Last Updated:** December 2025  
 **Project Version:** 1.0
