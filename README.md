@@ -8,7 +8,7 @@ This project implements a stepwise regression model with autoregressive componen
 ```
 CMT-Migration/
 │
-├── REPORT
+├── REPORT                      #Project Report
 ├── run_project.sh              # Main automation script 
 ├── README.md                   # This file
 ├── .git/
