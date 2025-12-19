@@ -51,7 +51,7 @@ T = cell2table(rows, 'VariableNames', varNames);
 %% 6) Detect year columns
 allVars = T.Properties.VariableNames;
 
-% AI-generated block (regex-based year detection and sorting)
+% AI-generated block (regex-based year detection and sorting), ChatGPT
 isYear  = ~cellfun(@isempty, regexp(allVars, '^x?(199\d|20[0-1]\d)$', 'once'));
 yearCols = allVars(isYear);
 
