@@ -360,7 +360,7 @@ for c = 1:length(countries)
    
     warning('off', 'stats:LinearModel:RankDefDesignMat');
     
-    % CHANGE: Use 'stepwiselm' --------------------------------------------------------------------------------------------------------------------------------
+    
  
     % (linear + selected interactions)
     
@@ -453,9 +453,6 @@ fprintf('Total countries processed: %d\n', height(allMetrics));
 fprintf('Average R²: %.4f\n', mean([allMetrics.RSquared])); 
 fprintf('Average Adjusted R²: %.4f\n', mean([allMetrics.AdjRSquared])); 
 fprintf('Average Training RMSE: %.0f\n\n', mean([allMetrics.RMSE_Train])); 
-
-
-
 
 
 fprintf('All predictions generated successfully!\n');

@@ -147,10 +147,7 @@ No need to build anything
 
 - Download the zip folder of the project and extract it ; 
 - on the bash access the project folder: cd /home/username/Downloads/CMT-Migration-main. #use your username
-- then execute :                         #one by one
-- mkdir -p results/evaluation
-- touch results/evaluation           # these two command make the results folder visible : sometimes can become hidden because it is empty at the beginning
-- chmod +x run_project.sh ; 
+- then execute :                        
 - ./run_project.sh ; 
 # FINAL OUTPUTS
 - All final Outputs are generated into the folder /results. 
