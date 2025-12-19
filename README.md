@@ -69,8 +69,6 @@ run_preprocessing.m
 
 ---  
 ## Step 2: Run Prediction Model
-matlab
-addpath(fullfile(pwd,'matlab','model'))
 run_model.m
 
 
