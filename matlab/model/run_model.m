@@ -1,9 +1,9 @@
 clc; clear; close all;
 
-fprintf('=== Migration Prediction Model for South America (Improved) ===\n');
+fprintf('=== Migration Prediction Model for South America ===\n');
 fprintf('Training period: 1990-2014\n');
 fprintf('Prediction period: 2015-2019\n');
-fprintf('Improvements: Reduced features + Ridge regularization + Cross-validation\n\n');
+
 
 thisFile    = mfilename('fullpath');
 modelDir    = fileparts(thisFile);
@@ -236,7 +236,7 @@ for c = 1:length(countries)
         continue; 
     end 
     
-    %% MODEL SPECIFICATION
+  
     
     % Full list of potential predictors
     predVars = {'GDPgrowth', 'GDPaccel', 'LogGDP', 'LogSchool', ...
@@ -265,7 +265,7 @@ for c = 1:length(countries)
     X_pred_raw(:, strcmp(predVars, 'MigrationLag1')) = 0; 
     X_pred_raw(:, strcmp(predVars, 'MigrationLag2')) = 0; 
     
-    %% NORMALIZATION & RANK DEFICIENCY FIX (CORRELATION FILTER)
+    %% NORMALIZATION & RANK FIX (CORRELATION FILTER)
     
     [X_train_norm, mu, sigma] = zscore(X_train_raw); 
     
@@ -283,8 +283,8 @@ for c = 1:length(countries)
     mu            = mu(keepMask);
     sigma         = sigma(keepMask);
     
-    % --- STEP 2: DROP HIGHLY CORRELATED FEATURES ---
-    % Calculate correlation matrix of remaining variables
+    % --- STEP 2: DROP HIGHLY CORRELATED FEATURES --- 
+    % Calculate correlation matrix of remaining variables # this filter has been written by an LLM
     if size(X_train_norm, 2) > 1
         R = corr(X_train_norm);
         % Find indices where correlation is near 1 or -1 (excluding diagonal)
@@ -313,7 +313,6 @@ for c = 1:length(countries)
     end
     
     % Apply final filters to prediction data
-    % We need to map back to original indices to apply mu/sigma correctly to X_pred_raw
     [~, keptIndicesInOriginal] = ismember(localPredVars, predVars);
     X_pred_raw_subset = X_pred_raw(:, keptIndicesInOriginal);
     X_pred_norm = (X_pred_raw_subset - mu) ./ sigma;
@@ -324,13 +323,13 @@ for c = 1:length(countries)
         continue; 
     end 
     
-    % Create tables for model fitting
+    
     TrainTable = array2table(X_train_norm, 'VariableNames', localPredVars); 
     TrainTable.NetMigration = y_train; 
     
     PredTable = array2table(X_pred_norm, 'VariableNames', localPredVars); 
     
-    %% DYNAMIC FORMULA GENERATION (CHECKING INTERACTIONS)
+    %% DYNAMIC FORMULA GENERATION (INTERACTIONS)
     % We must construct the formula string based ONLY on the surviving variables.
     
     formulaTerms = localPredVars;
@@ -354,18 +353,17 @@ for c = 1:length(countries)
         end
     end
     
-    % This is now the "Maximal" model string. 
-    % Stepwise regression will search subsets of this.
+   
     formulaStr = ['NetMigration ~ ' strjoin(formulaTerms, ' + ')];
 
-    %% FIT LINEAR MODEL (STEPWISE UPGRADE)
-    % Suppress rank deficiency warning (Stepwise handles this naturally)
+    %% FIT LINEAR MODEL (STEPWISE)
+   
     warning('off', 'stats:LinearModel:RankDefDesignMat');
     
-    % CHANGE: Use 'stepwiselm' instead of 'fitlm'
-    % Start from: Constant model
-    % Upper bound: The formula string we constructed (linear + selected interactions)
-    % Criterion: BIC (Bayesian Information Criterion) - penalizes complexity heavily
+    % CHANGE: Use 'stepwiselm' --------------------------------------------------------------------------------------------------------------------------------
+ 
+    % (linear + selected interactions)
+    
     mdl = stepwiselm(TrainTable, 'constant', ...
                      'Upper', formulaStr, ...
                      'Criterion', 'BIC', ...
@@ -407,7 +405,7 @@ for c = 1:length(countries)
             PredRow.MigrationLag2 = (current_lag2 - mu(idx)) / sigma(idx);
         end
         
-        % Generate prediction for this year
+      
         predicted_migration(pred_idx) = predict(mdl, PredRow); 
     end 
     
@@ -457,7 +455,7 @@ fprintf('Average Adjusted R²: %.4f\n', mean([allMetrics.AdjRSquared]));
 fprintf('Average Training RMSE: %.0f\n\n', mean([allMetrics.RMSE_Train])); 
 
 
-fprintf('\n'); 
+
 
 
 fprintf('All predictions generated successfully!\n');

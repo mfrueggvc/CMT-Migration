@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project implements a multi-linear regression model with autoregressive components to predict net migration flows in South American countries from 2015 to 2019, using socioeconomic data from 1990 to 2014 as training period.
+This project implements a stepwise regression model with autoregressive components to predict net migration flows in South American countries from 2015 to 2019, using socioeconomic data from 1990 to 2014 as training period.
 ##  Project Structure
 
 ```
@@ -33,14 +33,14 @@ CMT-Migration/
 │   │   ├── preprocess_Unemployment.m
 │   │   ├── preprocess_NetMigration.m
 │   │   ├── preprocess_Homicide.m
-│   │   ├── code_to_read_GDP.m
+│   │   ├── code_to_read_GDP.m                                    
 │   │   ├── code_to_read_Schooling.m
 │   │   ├── code_to_read_Unemployment.m
 │   │   ├── code_to_read_NetMigration.m
 │   │   └── code_to_read_Homicide.m
 │   ├── model/                  # Prediction model
-│   │   ├── model5.m
-│   │   └── run_model.m
+│   │   ├── model5.m ----------------------------------------------------------------------------------------------------------
+│   │   └── run_model.m 
 │   │
 │   │
 │   └── plots/                  # Visualization
@@ -103,8 +103,6 @@ run_plot_migration_results
 - PNG graphs in `results/evaluation/TimeSeriesCountry.png`  #time series for each country
 -  `results/evaluation/Summary_Accuracy.png` # evaluating the accuracy of the model compared to real data 
 
-
-
 ---
 
 ---
@@ -114,43 +112,10 @@ run_plot_migration_results
 ### **Training Period:** 1990-2014
 ### **Prediction Period:** 2015-2019
 
-### **Features Used:**
-1. **Economic Indicators:**
-   - GDP Growth (year-over-year %)
-   - GDP Acceleration (2nd derivative)
-   - Log(GDP) - reduces outlier impact
 
-2. **Education:**
-   - Mean Years of Schooling
-   - Log(SchoolYears)
-
-3. **Labor Market:**
-   - Unemployment Rate (%)
-   - Unemployment Change
-
-4. **Safety:**
-   - Homicide Rate (per 100k)
-   - Homicide Change
-   - Log(Homicide)
-
-5. **Derived Features:**
-   - Opportunity Index = GDP / SchoolYears
-   - Economic Stress = Unemployment × |GDP Growth|
-   - Safety Index = Homicide × Unemployment
-
-6. **Autoregressive Terms:**
-   - Migration Lag 1 (previous year)
-   - Migration Lag 2 (2 years prior)
-   - Migration Velocity (trend)
-
-7. **Interaction Terms:**
-   - GDP Growth × Unemployment
-   - Migration Lag 1 × GDP Growth
-   - Log(GDP) × Log(SchoolYears)
-   - Homicide × Unemployment
 
 ### **Model Type:**
-Multi-linear regression with interaction terms, fitted using ordinary least squares (OLS).
+//////INSERT REGRESSIONTYPE Stepwise regression with interaction terms, fitted using ordinary least squares (OLS).---------------------------------------
 
 ## **Iterative Prediction:**
 Since the model uses lagged migration values, predictions are generated year-by-year (2015, then 2016, etc.), feeding each year's prediction back into the model as a lag variable.

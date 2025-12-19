@@ -1,3 +1,5 @@
+##author Mirto Regazzoni, this code, especially the if - fi loops have been written with the help of claude sonnet 4.5 (llm)
+
 #!/usr/bin/env bash
 set -euo pipefail
 
