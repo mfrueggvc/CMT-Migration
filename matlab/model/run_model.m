@@ -71,7 +71,9 @@ fprintf('\n');
 allPredictions = table(); 
 allMetrics = table(); 
 
-for c = 1:length(countries)                        # this processing loop has been structured by Claude sonnet 4.5
+
+% this processing loop has been structured by Claude sonnet 4.5
+for c = 1:length(countries)                       
     currentCountry = countries{c}; 
     fprintf('Processing %s...\n', currentCountry); 
     
