@@ -67,6 +67,7 @@ run_preprocessing.m
 - `data/processed/Schooling_SouthAmerica_1990_2019.csv`
 - `data/processed/NetMigration_SouthAmerica_1990_2019.csv`
 
+---  
 ## Step 2: Run Prediction Model
 matlab
 addpath(fullfile(pwd,'matlab','model'))
@@ -198,10 +199,6 @@ with the help of generative AI
 - Autoregressive approach follows Box-Jenkins methodology
 - Evaluation metrics standard in time series forecasting
 
----
---- 
-
---- 
 ---
 
 ## License
