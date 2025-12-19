@@ -157,10 +157,17 @@ Since the model uses lagged migration values, predictions are generated year-by-
 No need to build anything
 
 ## Execute
-
-- Clone the repository or Download the zip folder of the project and extract it ; 
-- Use the bash or terminal to access the project folder: cd /home/username/Downloads/CMT-Migration-main. #use your username
-- then execute :                        
+- ### If you downloads the zip folder : 
+- use the bash or terminal to access the project folder:
+ cd /home/username/Downloads/CMT-Migration-main. #use your username
+- ### If you clone the repository :
+- use the bash or terminal to access a folder where you want the project,  
+- (example) cd /home/username/Downloads
+- then clone the repository : 
+- git clone (/URL)  # paste the URL of the repository instead of (/URL)
+- enter the folder : 
+- cd CMT-Migration      # notice that the name is different if you clone or donwloads the zip 
+- ### then execute :                        
 - bash run_project.sh ; 
 
 # FINAL OUTPUTS
