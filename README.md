@@ -8,6 +8,7 @@ This project implements a stepwise regression model with autoregressive componen
 ```
 CMT-Migration/
 │
+├── REPORT
 ├── run_project.sh              # Main automation script 
 ├── README.md                   # This file
 ├── .git/
@@ -32,23 +33,16 @@ CMT-Migration/
 │   │   ├── preprocess_Schooling.m
 │   │   ├── preprocess_Unemployment.m
 │   │   ├── preprocess_NetMigration.m
-│   │   ├── preprocess_Homicide.m
-│   │   ├── code_to_read_GDP.m                                    
-│   │   ├── code_to_read_Schooling.m
-│   │   ├── code_to_read_Unemployment.m
-│   │   ├── code_to_read_NetMigration.m
-│   │   └── code_to_read_Homicide.m
+│   │   └── preprocess_Homicide.m
+│   │   
 │   ├── model/                  # Prediction model
-│   │   ├── model5.m ----------------------------------------------------------------------------------------------------------
 │   │   └── run_model.m 
 │   │
 │   │
 │   └── plots/                  # Visualization
-│       ├── run_plot_migration_results.m
-│       └── plot_migration_results.m
+│       └──  run_plot_migration_results.m
 ├── c/
-│   ├── run_comparison.c        # Evaluation module (C)
-│   └── migration_compare.c          
+│   └── run_comparison.c        # Evaluation module (C)           
 │
 └── results/
     ├── predictions/            # Model outputs (CSV)
@@ -69,8 +63,11 @@ addpath(fullfile(pwd,'matlab','preprocessing'))
 run_preprocessing.m
 
 ### Expected Output
-- `data/processed/ 
-
+- `data/processed/Unemployment_SouthAmerica_1990_2019.csv`
+- `data/processed/GDOP_SouthAmerica_1990_2019.csv`
+- `data/processed/Homicide_SouthAmerica_1990_2019.csv`
+- `data/processed/Schooling_SouthAmerica_1990_2019.csv`
+- `data/processed/NetMigration_SouthAmerica_1990_2019.csv`
 
 ## Step 2: Run Prediction Model
 matlab
@@ -100,7 +97,7 @@ run_plot_migration_results
 
 
 ## Expected Output:
-- PNG graphs in `results/evaluation/TimeSeriesCountry.png`  #time series for each country
+- PNG graphs in `results/evaluation/TimeSeriesCountryName.png`  #time series for each country (12 Countries)
 -  `results/evaluation/Summary_Accuracy.png` # evaluating the accuracy of the model compared to real data 
 
 ---
@@ -111,16 +108,32 @@ run_plot_migration_results
 
 ### **Training Period:** 1990-2014
 ### **Prediction Period:** 2015-2019
-
+### Model Version (Prediction model): 8.0
 
 
 ### **Model Type:**
-//////INSERT REGRESSIONTYPE Stepwise regression with interaction terms, fitted using ordinary least squares (OLS).---------------------------------------
+Stepwise regression with interaction terms, fitted using ordinary least squares (OLS).
 
 ## **Iterative Prediction:**
 Since the model uses lagged migration values, predictions are generated year-by-year (2015, then 2016, etc.), feeding each year's prediction back into the model as a lag variable.
 
 ---
+## Raw and Engineered Predictors entering the filter : 
+-GDPgrowth
+-GDPaccel
+-LogGDP
+-LogSchool
+-Unemployment
+-UnempChange
+-Homicide
+-HomicideChange
+-LogHomicide
+-OpportunityIndex
+-EconomicStress
+-SafetyIndex
+-MigrationLag1
+-MigrationLag2
+-TimeTrend
 
 ## Evaluation Metrics
 
@@ -145,10 +158,11 @@ No need to build anything
 
 ## Execute
 
-- Download the zip folder of the project and extract it ; 
-- on the bash access the project folder: cd /home/username/Downloads/CMT-Migration-main. #use your username
+- Clone the repository or Download the zip folder of the project and extract it ; 
+- Use the bash or terminal to access the project folder: cd /home/username/Downloads/CMT-Migration-main. #use your username
 - then execute :                        
 - ./run_project.sh ; 
+
 # FINAL OUTPUTS
 - All final Outputs are generated into the folder /results. 
 - What you want to look at is all the graphs, in /results/evaluation/Graphs you will find the plots showing : 
@@ -207,4 +221,4 @@ This project is submitted as coursework. All data used is publicly available fro
    On Windows systems using individual MATLAB licenses, headless execution via shell scripts may fail due to licensing restrictions. In this case, the project can be executed by launching MATLAB manually and running the provided master script.
 
 **Last Updated:** December 2025  
-**Version:** 1.0
+**Project Version:** 1.0
