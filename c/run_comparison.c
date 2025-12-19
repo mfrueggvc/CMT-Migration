@@ -4,13 +4,13 @@
 #include <math.h>
 #include <ctype.h> 
 
-// CONFIGURATION - Aumentati per sicurezza
+// CONFIGURATION 
 #define MAX_ROWS 10000   
 #define MAX_COLS 500    
 #define MAX_LINE 4096   
 #define MAX_YEARS_PER_COUNTRY 200 
 
-// Ripristinata la funzione per costruire il percorso del summary
+// FUNCTION TO BUILD SUMMARY FILE PATH
 static void build_summary_path(const char *out_path, char *summary_path, size_t n) {
     const char *last_slash  = strrchr(out_path, '/');
     const char *last_bslash = strrchr(out_path, '\\');
@@ -50,8 +50,8 @@ int compare_doubles(const void *a, const void *b) {
     if (arg1 > arg2) return 1;
     return 0;
 }
-
-void strip_clean(char *str) {
+// the void funtions have been built by GeminiAI
+void strip_clean(char *str) { 
     char *src = str, *dst = str;
     while (*src) {
         if (*src != '"' && *src != '\'' && *src != '\r' && *src != '\n') {
@@ -80,6 +80,7 @@ void normalize_string(char *str) {
     if (start != str) memmove(str, start, strlen(start) + 1);
 }
 
+// Get country index
 int get_country_index(CountryStat stats[], int *count, const char *name) {
     for (int i = 0; i < *count; i++) {
         if (strcmp(stats[i].name, name) == 0) return i;
@@ -93,7 +94,7 @@ int get_country_index(CountryStat stats[], int *count, const char *name) {
     (*count)++;
     return (*count) - 1;
 }
-
+// Load truth data in wide format
 int load_truth_wide(const char *filename, Row rows[], int max_rows) {
     FILE *fp = fopen(filename, "r");
     if (!fp) { printf("Error: Could not open truth file %s\n", filename); return -1; }
@@ -132,7 +133,7 @@ int load_truth_wide(const char *filename, Row rows[], int max_rows) {
     fclose(fp);
     return row_count;
 }
-
+// Load predictions data
 int load_predictions(const char *filename, Row rows[], int max_rows) {
     FILE *fp = fopen(filename, "r");
     if (!fp) { printf("Error: Could not open prediction file %s\n", filename); return -1; }
@@ -188,7 +189,7 @@ int main(int argc, char *argv[]) {
 
     int matches = 0;
     double global_sum_ape = 0.0; 
-    
+    // Compare predictions to truth
     for (int i = 0; i < n_pred; i++) {
         double actual = find_value(truth_rows, n_truth, pred_rows[i].country, pred_rows[i].year);
         if (actual < 1e17) {
@@ -214,14 +215,14 @@ int main(int argc, char *argv[]) {
     }
     fclose(fout);
 
-    // USA LA FUNZIONE RIPRISTINATA PER IL FILE summary_out.csv
+    // Generate summary statistics
     char summary_path[512];
     build_summary_path(argv[3], summary_path, sizeof(summary_path));
     FILE *fsum = fopen(summary_path, "w");
     if (!fsum) { printf("Error creating summary file.\n"); return 1; }
     
     fprintf(fsum, "Country,Count,MAE,MBE,MedianAE,MAPE\n"); 
-
+    // Write per-country stats
     for(int i=0; i<num_countries; i++) {
         CountryStat *s = &country_stats[i];
         if(s->count > 0) {
