@@ -37,7 +37,7 @@ split_lines = cellfun(@(x) strsplit(strrep(x,'"',''), ','), ...
 
 ncol = length(column_names);
 
-% AI-generated block (robust CSV normalization)
+% AI-generated block (robust CSV normalization), ChatGPT
 for i = 1:length(split_lines)
     row = split_lines{i};
     if length(row) < ncol
