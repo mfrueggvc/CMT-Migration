@@ -119,9 +119,9 @@ common_style(gca);
 % Dynamic Linear Limits (Steps of 10)
 max_mape = max(T1.MAPE, [], 'omitnan');
 if max_mape > 0
-    upper_limit = ceil(max_mape / 10) * 10;
+    upper_limit = min(ceil(max_mape / 10) * 10, 190);
     if upper_limit == 0, upper_limit = 10; end
-    ylim([0, upper_limit]); yticks(0:10:upper_limit);
+    ylim([0, upper_limit]); yticks('auto');
 else
     yticks('auto');
 end
