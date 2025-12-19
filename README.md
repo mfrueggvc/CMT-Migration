@@ -97,7 +97,7 @@ run_plot_migration_results
 
 ## Expected Output:
 - PNG graphs in `results/evaluation/TimeSeriesCountryName.png`  #time series for each country (12 Countries)
--  `results/evaluation/Summary_Accuracy.png` # evaluating the accuracy of the model compared to real data 
+-  `results/evaluation/Summary_Accuracy.png` # evaluating the accuracy of the model
 
 ---
 
@@ -143,7 +143,7 @@ Since the model uses lagged migration values, predictions are generated year-by-
 | **MedianAE** | Median Absolute Error | Robustness to outliers |
 | **R²** | Coefficient of Determination | Training fit quality (0-1) |
 | **RMSE** | Root Mean Square Error | Penalizes large errors |
-
+| **AdjR²** | Adjusted Coefficient of Determination | Measures explanatory power while accounting for overfitting, penalizes model complexity |
 
 # RUNNING THE PROGRAMM : 
 

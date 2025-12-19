@@ -71,7 +71,7 @@ fprintf('\n');
 allPredictions = table(); 
 allMetrics = table(); 
 
-for c = 1:length(countries) 
+for c = 1:length(countries)                        # this processing loop has been structured by Claude sonnet 4.5
     currentCountry = countries{c}; 
     fprintf('Processing %s...\n', currentCountry); 
     
@@ -178,7 +178,7 @@ for c = 1:length(countries)
     homicideChange(~isfinite(homicideChange)) = 0;
     Tcountry.HomicideChange = homicideChange;
     
-    % Migration Momentum (IMPORTANT: LEAKAGE FIXED)
+    % Migration Momentum 
     % Lag 1: Migration the previous year
     Tcountry.MigrationLag1 = [NaN; Tcountry.NetMigration(1:end-1)]; 
     % Lag 2: Migration 2 years ago
@@ -284,7 +284,7 @@ for c = 1:length(countries)
     sigma         = sigma(keepMask);
     
     % --- STEP 2: DROP HIGHLY CORRELATED FEATURES --- 
-    % Calculate correlation matrix of remaining variables # this filter has been written by an LLM
+    % Calculate correlation matrix of remaining variables # this filter has been written by Google Gemini
     if size(X_train_norm, 2) > 1
         R = corr(X_train_norm);
         % Find indices where correlation is near 1 or -1 (excluding diagonal)
