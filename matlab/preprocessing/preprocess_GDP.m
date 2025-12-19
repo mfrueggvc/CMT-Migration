@@ -36,6 +36,8 @@ split_lines = cellfun(@(x) strsplit(strrep(x,'"',''), ','), ...
 
 
 ncol = length(column_names);
+
+% AI-generated block (robust CSV normalization)
 for i = 1:length(split_lines)
     row = split_lines{i};
     if length(row) < ncol
@@ -45,6 +47,7 @@ for i = 1:length(split_lines)
     end
     split_lines{i} = row;
 end
+% End AI-generated block
 
 
 T = cell2table(vertcat(split_lines{:}), ...
