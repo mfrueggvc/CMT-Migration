@@ -50,6 +50,8 @@ T = cell2table(rows, 'VariableNames', varNames);
 
 %% 6) Detect year columns
 allVars = T.Properties.VariableNames;
+
+% AI-generated block (regex-based year detection and sorting)
 isYear  = ~cellfun(@isempty, regexp(allVars, '^x?(199\d|20[0-1]\d)$', 'once'));
 yearCols = allVars(isYear);
 
@@ -60,6 +62,7 @@ yearCols = yearCols(mask);
 
 [years, idx] = sort(years);
 yearCols = yearCols(idx);
+% End AI-generated block
 
 %% 7) Country column
 if ismember('CountryName', T.Properties.VariableNames)
