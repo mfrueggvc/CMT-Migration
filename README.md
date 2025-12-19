@@ -161,7 +161,7 @@ No need to build anything
 - Clone the repository or Download the zip folder of the project and extract it ; 
 - Use the bash or terminal to access the project folder: cd /home/username/Downloads/CMT-Migration-main. #use your username
 - then execute :                        
-- ./run_project.sh ; 
+- bash run_project.sh ; 
 
 # FINAL OUTPUTS
 - All final Outputs are generated into the folder /results. 
